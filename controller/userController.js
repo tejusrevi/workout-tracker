@@ -1,24 +1,40 @@
 const User = require('../model/user.js').User
+var passwordHash = require('password-hash');
 
-module.exports.add = async (req, res) => {
+
+module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
+  var hashedPassword = passwordHash.generate(password);
 
-  //let isValid = await v.validate_fields(name, email, tel, address);
+  //TODO Validator
   let isValid = true;
   if (isValid){
-      let new_user = new User(username, email, password);
-      let msg = await new_user.save();
-      res.send(msg);                
+      let new_user = new User(true, username, email, hashedPassword);
+      let userInserted = await new_user.save();
+      if (userInserted){
+        msg = 'User ' + username + ' was correctly inserted to the database.'
+      }
+      else{
+        msg = 'Email address already exists. Try logging in.'
+      }           
   } else {
-      console.log('The Contact was not inserted in the database since it is not valid.');
-      res.send('Error. User not inserted in the database.');
+      msg = 'Error. User not inserted in the database.';
+  }
+
+  res.send(msg);     
+};
+
+module.exports.addNonLocal = async (username, email) => {
+  if (User.emailDoesNotExists(email)){
+    let new_user = new User(false, username, email);
+    let msg = await new_user.save();
   }
 };
 
 module.exports.validateUser = async (email, password) => {
-  if (await User.getPasswordFor(email) == password) return true;
+  if (passwordHash.verify(password, await User.getPasswordFor(email))) return true;
   return false;
 }
 

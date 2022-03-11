@@ -1,10 +1,8 @@
 const express = require('express');
-const session = require('express-session')
-var path = require('path');
-const passport = require('passport')
+const session = require('express-session');
+//var path = require('path');
+const passport = require('passport');
 
-//////////////
-var request = require('request');
 
 const app = express();
 const port = 3000;
@@ -44,7 +42,7 @@ async function createServer(){
     );
 
     app.post('/register',
-      userController.add
+      userController.addLocal
     );
 
     // Google Auth

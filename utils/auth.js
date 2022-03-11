@@ -12,11 +12,13 @@ const GOOGLE_CLIENT_SECRET = "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"
 const oauth2Client = new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
 
 // Google Strategy
-authGoogleUser = (request, accessToken, refreshToken, profile, done) => {
+authGoogleUser = async (request, accessToken, refreshToken, profile, done) => {
   oauth2Client.setCredentials({
     access_token: accessToken,
     refresh_token: refreshToken,
   });
+  console.log(profile)
+  userObj = await userController.addNonLocal(profile.displayName, profile.email)
   return done(null, profile);
 }
 

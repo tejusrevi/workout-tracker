@@ -11,7 +11,8 @@ async function _get_users_collection (){
  */
 
 class User {
-  constructor(username, email, password){
+  constructor(isLocal, username, email, password){
+    this.isLocal = isLocal;
     this.username = username;
     this.email = email;
     this.password = password;
@@ -37,12 +38,12 @@ class User {
         let collection = await _get_users_collection();
         let mongoObj = await collection.insertOne(this);
         console.log('1 User was inserted in the database with id -> '+mongoObj.insertedId);
-        return 'User correctly inserted in the Database.';            
+        return true;            
       }catch(err){
         throw err
       } 
      }else{
-       return 'User with email address exists'
+       return false;
      }
 
            
