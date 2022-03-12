@@ -63,6 +63,11 @@ async function createServer(){
       res.send( req.user.displayName)
     })
 
+    //
+    app.get("/addWorkout", auth.checkAuthenticated, (req, res) => {
+      userController.addWorkout
+    })
+
     // start the server
     server = app.listen(port, () => {
       console.log('App listening at http://localhost:%d', port);

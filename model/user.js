@@ -1,4 +1,5 @@
 const client = require('../utils/db.js');
+var passwordHash = require('password-hash');
 
 async function _get_users_collection (){
     let db = await client.getDb();
@@ -22,20 +23,6 @@ class User {
     };
   }
 
-  static async emailDoesNotExists(email){
-    try{
-      let collection = await _get_users_collection();
-      let count = await collection.count({email: email})
-      console.log( count )
-      if (count > 0){
-        return false
-      }
-      return true
-    }catch(err){
-      throw err
-    }
-  }
-
   async save(){
      if (await User.emailDoesNotExists(this.email)){
       try{
@@ -48,9 +35,21 @@ class User {
       } 
      }else{
        return false;
-     }
+     }       
+  }
 
-           
+  static async emailDoesNotExists(email){
+    try{
+      let collection = await _get_users_collection();
+      let count = await collection.count({email: email})
+      console.log( count )
+      if (count > 0){
+        return false
+      }
+      return true
+    }catch(err){
+      throw err
+    }
   }
 
   static async getPasswordFor(email){
@@ -75,7 +74,18 @@ class User {
     }catch(err){
       throw err;
     }
-    
+  }
+
+  static async addNonLocal (username, email){
+    if (User.emailDoesNotExists(email)){
+      let new_user = new User(false, username, email);
+      let msg = await new_user.save();
+    }
+  };
+
+  static async validateUser(email, password){
+    if (passwordHash.verify(password, await User.getPasswordFor(email))) return true;
+    return false;
   }
 }
 

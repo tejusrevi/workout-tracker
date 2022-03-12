@@ -4,7 +4,7 @@ const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const LocalStrategy = require( 'passport-local' ).Strategy;
 const { google } = require("googleapis");
 
-const userController = require('../controller/userController')
+const User = require('../model/user').User
 
 const GOOGLE_CLIENT_ID = "125650216413-snnjss4b97no4tkkcvrvbeecvopkbc9u.apps.googleusercontent.com"
 const GOOGLE_CLIENT_SECRET = "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"
@@ -18,7 +18,7 @@ authGoogleUser = async (request, accessToken, refreshToken, profile, done) => {
     refresh_token: refreshToken,
   });
   console.log(profile)
-  userObj = await userController.addNonLocal(profile.displayName, profile.email)
+  userObj = await User.addNonLocal(profile.displayName, profile.email)
   return done(null, profile);
 }
 
@@ -32,8 +32,8 @@ passport.use(new GoogleStrategy({
 
 //Local Strategy
 authLocalUser = async (email, password, done) => {
-  if (await userController.validateUser(email, password)){
-    userObj = await userController.getUserDetails(email)
+  if (await User.validateUser(email, password)){
+    userObj = await User.getUserDetails(email)
     return done(null, {displayName: userObj.username});
   }else{
     return done(null, false);

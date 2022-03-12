@@ -1,6 +1,5 @@
-const User = require('../model/user.js').User
 var passwordHash = require('password-hash');
-
+const User = require('../model/user.js').User;
 
 module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
@@ -25,19 +24,3 @@ module.exports.addLocal = async (req, res) => {
 
   res.send(msg);     
 };
-
-module.exports.addNonLocal = async (username, email) => {
-  if (User.emailDoesNotExists(email)){
-    let new_user = new User(false, username, email);
-    let msg = await new_user.save();
-  }
-};
-
-module.exports.validateUser = async (email, password) => {
-  if (passwordHash.verify(password, await User.getPasswordFor(email))) return true;
-  return false;
-}
-
-module.exports.getUserDetails = async (email) => {
-  return await User.getUserDetails(email)
-}
