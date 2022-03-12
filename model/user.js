@@ -205,8 +205,7 @@ class User {
   }
 
   static async getPasswordFor(email) {
-    let o = await User.emailDoesNotExists(email);
-    if (!o) {
+    if (!await User.emailDoesNotExists(email)) {
       try {
         let collection = await _get_users_collection();
         let mongoObj = await collection.findOne({ email: email });
