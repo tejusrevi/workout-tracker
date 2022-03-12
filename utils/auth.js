@@ -17,9 +17,8 @@ authGoogleUser = async (request, accessToken, refreshToken, profile, done) => {
     access_token: accessToken,
     refresh_token: refreshToken,
   });
-  console.log(profile)
   userObj = await User.addNonLocal(profile.displayName, profile.email)
-  return done(null, profile);
+  return done(null, {user: userObj});
 }
 
 passport.use(new GoogleStrategy({
@@ -32,9 +31,9 @@ passport.use(new GoogleStrategy({
 
 //Local Strategy
 authLocalUser = async (email, password, done) => {
-  if (await User.validateUser(email, password)){
+  if (await User.authenticateUser(email, password)){
     userObj = await User.getUserDetails(email)
-    return done(null, {displayName: userObj.username});
+    return done(null, {user: userObj});
   }else{
     return done(null, false);
   } 
@@ -43,12 +42,10 @@ authLocalUser = async (email, password, done) => {
 passport.use(new LocalStrategy({usernameField: 'email'}, authLocalUser))
 
 passport.serializeUser( (user, done) => { 
-  console.log(user)
   done(null, user)
 } )
 
 passport.deserializeUser((user, done) => {
-  console.log(user)
   done(null, user)
 }) 
 

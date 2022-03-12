@@ -60,13 +60,16 @@ async function createServer(){
 
     // Dashboard
     app.get("/dashboard", auth.checkAuthenticated, (req, res) => {
-      res.send( req.user.displayName)
-    })
+      res.sendFile(path.resolve('view/authenticated/dashboard.html'))
+    });
 
-    //
-    app.get("/addWorkout", auth.checkAuthenticated, (req, res) => {
-      userController.addWorkout
-    })
+    // Add Workout Plan Form
+    app.get("/WorkoutPlan", auth.checkAuthenticated, (req, res) => {
+      res.sendFile(path.resolve('view/authenticated/addWorkoutPlan.html'))
+    });
+
+    app.post("/workoutPlan", auth.checkAuthenticated, userController.addWorkoutPlan);
+    app.delete("/workoutPlan/:day/:workoutID", auth.checkAuthenticated, userController.deleteWorkoutPlan);
 
     // start the server
     server = app.listen(port, () => {

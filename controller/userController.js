@@ -6,11 +6,12 @@ module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
-  var hashedPassword = passwordHash.generate(password);
+  console.log("register")
+  console.log(req.body)
 
   let isFormValid = validator.validUserInfo(username, email, password);
-  console.log(isFormValid)
   if (isFormValid.valid){
+      var hashedPassword = passwordHash.generate(password);
       let new_user = new User(true, username, email, hashedPassword);
       let userInserted = await new_user.save();
       if (userInserted){
@@ -22,6 +23,23 @@ module.exports.addLocal = async (req, res) => {
   } else {
       msg = isFormValid.errorMessage;
   }
-
   res.send(msg);     
+};
+
+module.exports.addWorkoutPlan = async (req, res) => {
+  let userID = req.user.user._id;
+  let day = req.body.day;
+  let workoutID = req.body.workoutID;
+
+  res.send(await User.addWorkoutPlan(userID, day, workoutID));
+
+};
+
+module.exports.deleteWorkoutPlan = async (req, res) => {
+  let userID = req.user.user._id;
+  let day = req.params.day;
+  let workoutID = req.params.workoutID;
+
+  res.send(await User.deleteWorkoutPlan(userID, day, workoutID));
+
 };
