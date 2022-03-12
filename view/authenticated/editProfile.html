@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <h1>Edit Profile</h1>
+  <form action="/user" method="POST">
+    New Username <input type="text" name="username" />
+    New password <input type="text" name="password" /> 
+    Age <input type="number" name="age" />
+    Gender
+    <input type="radio" id="male" name="gender" value="male">
+    <label for="male">Male</label><br>
+    <input type="radio" id="female" name="gender" value="female">
+    <label for="female">Female</label><br>
+    <input type="radio" id="other" name="gender" value="other">
+    <label for="other">Other</label>
+    Height <input type="number" name="height" />
+    Weight <input type="number" name="weight" />
+    Goal Weight <input type="number" name="goalWeight" />
+    <button type="submit">Submit</button>
+  </form>
+</html>

@@ -40,10 +40,20 @@ async function createServer(){
       })
     );
 
-    app.post('/register',
-      userController.addLocal
-    );
+    app.post('/user', userController.addLocal);
+    
+    app.delete('/user', auth.checkAuthenticated, userController.deleteUser);
 
+    app.put('/user', auth.checkAuthenticated, userController.updateUser);
+
+    app.put('/personalInformation', auth.checkAuthenticated, userController.updatePersonalInformation);
+
+    app.get("/exercise/bodyPart/:bodyPart", exerciseController.showByBodyPart);
+    app.get("/exercise/targetMuscle/:targetMuscle", exerciseController.showByTargetMuscle);
+    app.get("/exercise/bodyPart/:bodyPart/targetMuscle/:targetMuscle", exerciseController.showByBodyPartAndMuscle);
+    app.get("/exercise/exerciseName/:exerciseName", auth.checkAuthenticated, exerciseController.showByExerciseName);
+
+    
     // Google Auth
     app.get('/auth/google',
       passport.authenticate('google', { scope:
@@ -63,8 +73,12 @@ async function createServer(){
       res.sendFile(path.resolve('view/authenticated/dashboard.html'))
     });
 
+    app.get("/editProfile", auth.checkAuthenticated, (req, res) => {
+      res.sendFile(path.resolve('view/authenticated/editProfile.html'))
+    });
+
     // Add Workout Plan Form
-    app.get("/WorkoutPlan", auth.checkAuthenticated, (req, res) => {
+    app.get("/workoutPlan", auth.checkAuthenticated, (req, res) => {
       res.sendFile(path.resolve('view/authenticated/addWorkoutPlan.html'))
     });
 
