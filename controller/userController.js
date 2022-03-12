@@ -1,5 +1,6 @@
 var passwordHash = require('password-hash');
 const User = require('../model/user.js').User;
+const validator = require('../utils/validate-fields.js');
 
 module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
@@ -7,9 +8,9 @@ module.exports.addLocal = async (req, res) => {
   let password = req.body.password;
   var hashedPassword = passwordHash.generate(password);
 
-  //TODO Validator
-  let isValid = true;
-  if (isValid){
+  let isFormValid = validator.validUserInfo(username, email, password);
+  console.log(isFormValid)
+  if (isFormValid.valid){
       let new_user = new User(true, username, email, hashedPassword);
       let userInserted = await new_user.save();
       if (userInserted){
@@ -19,7 +20,7 @@ module.exports.addLocal = async (req, res) => {
         msg = 'Email address already exists. Try logging in.'
       }           
   } else {
-      msg = 'Error. User not inserted in the database.';
+      msg = isFormValid.errorMessage;
   }
 
   res.send(msg);     

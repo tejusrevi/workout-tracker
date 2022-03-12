@@ -1,23 +1,41 @@
 var emailValidator = require("email-validator");
 
+var errorMessage;
 module.exports.validUserInfo = (username, email, password) =>{
-  let msg;
-  if (username == "" || email == "" || password == ""){
-    if (username == ""){
-      msg = "Please enter an username";
-    }else if (email == "") {
-      msg = "Please enter an email address";
-    }else if (password == "") {
-      msg = "Please enter a password";
-    }
-  }else if (!validator.validate(email)){
-    msg = "Please enter a valid email address";
+  errorMessage = "";
+  if (validUsername(username) & validEmail(email) & validPassword(password)){
+    return { valid: true }
+  }else{
+    return { valid: false,
+      errorMessage: errorMessage
+   }
   }
-
 }
 
-module.exports.validUsername = (username) => {
+validUsername = (username) => {
   if (username == ""){
-    return "Please enter an username";
+    errorMessage += "Please enter an username <br/>";
+    return false;
   }
+  return true;
+}
+
+validEmail = (email) => {
+  if (email == ""){
+    errorMessage += "Please enter an email address <br/>";
+    return false;
+  }
+  if (!emailValidator.validate(email)){
+    errorMessage += "Invalid email address <br/>";
+    return false;
+  }
+  return true;
+}
+
+validPassword = (password) => {
+  if (password == ""){
+    errorMessage += "Please enter a password \n";
+    return false;
+  }
+  return true;
 }
