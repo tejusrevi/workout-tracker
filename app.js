@@ -43,32 +43,6 @@ async function createServer() {
       })
     );
 
-    app.post("/user", userController.addLocal);
-
-    app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
-
-    app.put("/user", auth.checkAuthenticated, userController.updateUser);
-
-    app.put(
-      "/personalInformation",
-      auth.checkAuthenticated,
-      userController.updatePersonalInformation
-    );
-
-    app.get("/exercise/bodyPart/:bodyPart", exerciseController.getByBodyPart);
-    app.get(
-      "/exercise/targetMuscle/:targetMuscle",
-      exerciseController.getByTargetMuscle
-    );
-    app.get(
-      "/exercise/exerciseName/:exerciseName",
-      exerciseController.getByExerciseName
-    );
-    app.get(
-      "/exercise/equipment/:equipment",
-      exerciseController.getByEquipment
-    );
-
     // Google Auth
     app.get(
       "/auth/google",
@@ -82,6 +56,19 @@ async function createServer() {
         failureRedirect: "/",
       })
     );
+
+    ////////get user?
+    app.post("/user", userController.addLocal);
+    app.put("/user", auth.checkAuthenticated, userController.updateUser);
+    app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
+    app.put(
+      "/personalInformation",
+      auth.checkAuthenticated,
+      userController.updatePersonalInformation
+    );
+
+    app.get("/exercise/:exerciseID", exerciseController.getExerciseByID);
+    app.get("/exercise", exerciseController.getAllExercise);
 
     // Dashboard
     app.get("/dashboard", auth.checkAuthenticated, (req, res) => {

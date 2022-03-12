@@ -18,11 +18,11 @@ class Exercise {
 
   async save() {}
 
-  static async getByBodyPart(bodyPart) {
+  static async getExerciseByID(exerciseID) {
     try {
       let exerciseCollection = await _get_exercise_collection();
       let mongoObj = await exerciseCollection
-        .find({ bodyPart: bodyPart })
+        .find({ id: exerciseID })
         .toArray();
       return mongoObj;
     } catch (err) {
@@ -30,66 +30,25 @@ class Exercise {
     }
   }
 
-  static async getByTargetMuscle(targetMuscle) {
+  static async getAllExercise(bodyPart, target, equipment) {
+    let queryString = {};
+    if (bodyPart) {
+      queryString["bodyPart"] = bodyPart;
+    }
+    if (target) {
+      queryString["target"] = target;
+    }
+    if (equipment) {
+      queryString["equipment"] = equipment;
+    }
     try {
       let exerciseCollection = await _get_exercise_collection();
-      let mongoObj = await exerciseCollection
-        .find({ target: targetMuscle })
-        .toArray();
+      let mongoObj = await exerciseCollection.find(queryString).toArray();
       return mongoObj;
     } catch (err) {
       throw err;
     }
   }
-
-  static async getByBodyPartAndMuscle(bodyPart, targetMuscle) {
-    try {
-      let exerciseCollection = await _get_exercise_collection();
-      let mongoObj = await exerciseCollection
-        .find({ bodyPart: bodyPart, target: targetMuscle })
-        .toArray();
-      return mongoObj;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  static async getByExerciseName(exerciseName) {
-    try {
-      let exerciseCollection = await _get_exercise_collection();
-      let mongoObj = await exerciseCollection
-        .find({ name: exerciseName })
-        .toArray();
-      return mongoObj;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  static async getByBodyPartAndEquipment(bodyPart, equipment) {
-    try {
-      let exerciseCollection = await _get_exercise_collection();
-      let mongoObj = await exerciseCollection
-        .find({ bodyPart: bodyPart, equipment: equipment })
-        .toArray();
-      return mongoObj;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  static async getByEquipment(equipment) {
-    try {
-      let exerciseCollection = await _get_exercise_collection();
-      let mongoObj = await exerciseCollection
-        .find({ equipment: equipment })
-        .toArray();
-      return mongoObj;
-    } catch (err) {
-      throw err;
-    }
-  }
-  
 }
 
 module.exports.Exercise = Exercise;
