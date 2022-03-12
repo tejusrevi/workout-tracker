@@ -1,6 +1,6 @@
 const express = require('express');
 const session = require('express-session');
-//var path = require('path');
+var path = require('path');
 const passport = require('passport');
 
 
@@ -17,7 +17,6 @@ app.use(session({
 }))
 app.use(passport.initialize()) // init passport on every route call
 app.use(passport.session())    //allow passport to use "express-session"
-
 
 const mongo = require('./utils/db.js');
 const auth = require('./utils/auth.js');

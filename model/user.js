@@ -5,10 +5,6 @@ async function _get_users_collection (){
     return await db.collection('user');
 };
 
-/**
- * The class contact, with a main constructor and two methods
- * to add more fields retrieved with the third-party APIs
- */
 
 class User {
   constructor(isLocal, username, email, password){
@@ -16,6 +12,14 @@ class User {
     this.username = username;
     this.email = email;
     this.password = password;
+    this.workoutPlan ={"Monday" : [],
+                        "Tuesday" : [],
+                        "Wednesday" : [],
+                        "Thursday" : [],
+                        "Friday" : [],
+                        "Saturday" : [],
+                        "Sunday" : []
+    };
   }
 
   static async emailDoesNotExists(email){
