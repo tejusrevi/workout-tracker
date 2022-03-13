@@ -16,8 +16,6 @@ class Exercise {
     this.target = target;
   }
 
-  async save() {}
-
   static async getExerciseByID(exerciseID) {
     try {
       let exerciseCollection = await _get_exercise_collection();

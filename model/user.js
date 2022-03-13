@@ -16,15 +16,6 @@ class User {
     this.password = password;
 
     // Secondary information. Any updates made to this information will not logout the user
-    this.workoutPlan = {
-      sunday: [],
-      monday: [],
-      tuesday: [],
-      wednesday: [],
-      thursday: [],
-      friday: [],
-      saturday: [],
-    };
     this.personalInfo = {
       age: null,
       gender: null,
@@ -39,16 +30,25 @@ class User {
       try {
         let collection = await _get_users_collection();
         let mongoObj = await collection.insertOne(this);
-        console.log(
-          "1 User was inserted in the database with id -> " +
-            mongoObj.insertedId
-        );
         return true;
       } catch (err) {
         throw err;
       }
     } else {
       return false;
+    }
+  }
+
+  static async getUserByID(userID) {
+    try {
+      let collection = await _get_users_collection();
+      let mongoObj = await collection.findOne({ _id: ObjectId(userID) });
+      delete mongoObj._id;
+      delete mongoObj.password;
+      delete mongoObj.isLocal;
+      return mongoObj;
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -108,8 +108,6 @@ class User {
     weight,
     goalWeight
   ) {
-    console.log("gw")
-    console.log(goalWeight)
     let mongoObj;
     let modified = false;
     try {
@@ -154,7 +152,6 @@ class User {
         }
       }
       if (weight != undefined) {
-        console.log("updating weight")
         mongoObj = await collection.updateOne(
           { _id: ObjectId(userID) },
           {
@@ -239,106 +236,6 @@ class User {
     return false;
   }
 
-  static async addWorkoutPlan(userID, day, workoutID) {
-    try {
-      let collection = await _get_users_collection();
-      let mongoObj;
-      if (day == 0) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.sunday": workoutID } }
-        );
-      } else if (day == 1) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.monday": workoutID } }
-        );
-      } else if (day == 2) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.tuesday": workoutID } }
-        );
-      } else if (day == 3) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.wednesday": workoutID } }
-        );
-      } else if (day == 4) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.thursday": workoutID } }
-        );
-      } else if (day == 5) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.friday": workoutID } }
-        );
-      } else if (day == 6) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $push: { "workoutPlan.saturday": workoutID } }
-        );
-      } else {
-        return "Incorrect date.";
-      }
-      return "Workout " + workoutID + " was added.";
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  static async deleteWorkoutPlan(userID, day, workoutID) {
-    try {
-      let collection = await _get_users_collection();
-      let mongoObj;
-      if (day == 0) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.sunday": workoutID } }
-        );
-      } else if (day == 1) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.monday": workoutID } }
-        );
-      } else if (day == 2) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.tuesday": workoutID } }
-        );
-      } else if (day == 3) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.wednesday": workoutID } }
-        );
-      } else if (day == 4) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.thursday": workoutID } }
-        );
-      } else if (day == 5) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.friday": workoutID } }
-        );
-      } else if (day == 6) {
-        mongoObj = await collection.updateOne(
-          { _id: ObjectId(userID) },
-          { $pull: { "workoutPlan.saturday": workoutID } }
-        );
-      } else {
-        return "Incorrect date.";
-      }
-
-      if (mongoObj.modifiedCount == 1) {
-        return "Workout " + workoutID + " was removed.";
-      } else {
-        return "Error in deleting " + workoutID;
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
 }
 
 module.exports.User = User;

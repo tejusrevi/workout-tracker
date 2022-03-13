@@ -2,11 +2,15 @@ let passwordHash = require("password-hash");
 const User = require("../model/user.js").User;
 const validator = require("../utils/validate-fields.js");
 
+module.exports.getUserByID = async (req, res) => {
+  let userID = req.user.user._id;
+  res.send(await User.getUserByID(userID));
+}
+
 module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
-  console.log(req.body);
 
   let isFormValid = validator.validUserInfo(username, email, password);
   if (isFormValid.valid) {
@@ -93,18 +97,5 @@ module.exports.updatePersonalInformation = async (req, res) => {
     res.send(isUserValid.errorMessage);
   }
 };
-module.exports.addWorkoutPlan = async (req, res) => {
-  let userID = req.user.user._id;
-  let day = req.body.day;
-  let workoutID = req.body.workoutID;
 
-  res.send(await User.addWorkoutPlan(userID, day, workoutID));
-};
 
-module.exports.deleteWorkoutPlan = async (req, res) => {
-  let userID = req.user.user._id;
-  let day = req.params.day;
-  let workoutID = req.params.workoutID;
-
-  res.send(await User.deleteWorkoutPlan(userID, day, workoutID));
-};

@@ -24,7 +24,7 @@ const auth = require("./utils/auth.js");
 
 const userController = require("./controller/userController.js");
 const exerciseController = require("./controller/exerciseController.js");
-var server;
+const workoutProgramController = require("./controller/workoutProgramController.js");
 
 async function createServer() {
   try {
@@ -38,7 +38,7 @@ async function createServer() {
     app.post(
       "/auth/local",
       passport.authenticate("local", {
-        successRedirect: "/dashboard",
+        successRedirect: "/user",
         failureRedirect: "/",
       })
     );
@@ -52,17 +52,17 @@ async function createServer() {
     app.get(
       "/auth/google/callback",
       passport.authenticate("google", {
-        successRedirect: "/dashboard",
+        successRedirect: "/user",
         failureRedirect: "/",
       })
     );
 
-    ////////get user?
+    app.get("/user", auth.checkAuthenticated, userController.getUserByID); // Receives userID from the session
     app.post("/user", userController.addLocal);
-    app.put("/user", auth.checkAuthenticated, userController.updateUser);
     app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
+    app.put("/user", auth.checkAuthenticated, userController.updateUser);
     app.put(
-      "/personalInformation",
+      "user/personalInformation",
       auth.checkAuthenticated,
       userController.updatePersonalInformation
     );
@@ -70,30 +70,50 @@ async function createServer() {
     app.get("/exercise/:exerciseID", exerciseController.getExerciseByID);
     app.get("/exercise", exerciseController.getAllExercise);
 
-    // Dashboard
-    app.get("/dashboard", auth.checkAuthenticated, (req, res) => {
-      res.sendFile(path.resolve("view/authenticated/dashboard.html"));
-    });
-
-    app.get("/editProfile", auth.checkAuthenticated, (req, res) => {
-      res.sendFile(path.resolve("view/authenticated/editProfile.html"));
-    });
-
-    // Add Workout Plan Form
-    app.get("/workoutPlan", auth.checkAuthenticated, (req, res) => {
-      res.sendFile(path.resolve("view/authenticated/addWorkoutPlan.html"));
-    });
-
-    app.post(
-      "/workoutPlan",
+    app.get(
+      "/workoutProgram",
+      workoutProgramController.getAllPublicWorkoutPrograms
+    );
+    app.get(
+      "/workoutProgram/:workoutProgramID",
       auth.checkAuthenticated,
-      userController.addWorkoutPlan
+      workoutProgramController.getWorkoutProgram
+    );
+    app.post(
+      "/workoutProgram",
+      auth.checkAuthenticated,
+      workoutProgramController.addWorkoutProgram
     );
     app.delete(
-      "/workoutPlan/:day/:workoutID",
+      "/workoutProgram/:workoutProgramID",
       auth.checkAuthenticated,
-      userController.deleteWorkoutPlan
+      workoutProgramController.deleteWorkoutProgram
     );
+    app.put(
+      "/workoutProgram/:workoutProgramID",
+      auth.checkAuthenticated,
+      workoutProgramController.updateWorkoutProgram
+    );
+
+
+
+    app.put(
+      "/addExercise/:workoutProgramID",
+      auth.checkAuthenticated,
+      workoutProgramController.addExerciseToWorkoutProgram
+    );
+
+    app.put(
+      "/removeExercise/:workoutProgramID", // Exercise id passed as query param
+      auth.checkAuthenticated,
+      workoutProgramController.removeExerciseFromWorkoutProgram
+    );
+
+    app.get(
+      "/user/workoutPrograms",
+      auth.checkAuthenticated,
+      workoutProgramController.getWorkoutProgramsByUser
+    )
 
     // start the server
     server = app.listen(port, () => {
