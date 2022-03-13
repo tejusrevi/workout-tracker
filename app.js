@@ -62,7 +62,7 @@ async function createServer() {
     app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
     app.put("/user", auth.checkAuthenticated, userController.updateUser);
     app.put(
-      "user/personalInformation",
+      "/user/personalInformation",
       auth.checkAuthenticated,
       userController.updatePersonalInformation
     );
@@ -76,8 +76,7 @@ async function createServer() {
     );
     app.get(
       "/workoutProgram/:workoutProgramID",
-      auth.checkAuthenticated,
-      workoutProgramController.getWorkoutProgram
+      workoutProgramController.getWorkoutProgramByID
     );
     app.post(
       "/workoutProgram",
@@ -95,16 +94,14 @@ async function createServer() {
       workoutProgramController.updateWorkoutProgram
     );
 
-
-
     app.put(
-      "/addExercise/:workoutProgramID",
+      "/workoutProgram/addExercise/:workoutProgramID",
       auth.checkAuthenticated,
       workoutProgramController.addExerciseToWorkoutProgram
     );
 
     app.put(
-      "/removeExercise/:workoutProgramID", // Exercise id passed as query param
+      "/workoutProgram/removeExercise/:workoutProgramID", // Exercise id passed as query param
       auth.checkAuthenticated,
       workoutProgramController.removeExerciseFromWorkoutProgram
     );

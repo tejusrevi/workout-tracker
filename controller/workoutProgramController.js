@@ -1,21 +1,27 @@
 const WorkoutProgram = require("../model/workoutProgram.js").WorkoutProgram;
 const Exercise = require("../model/exercise.js").Exercise;
-const UserController = require("../controller/userController.js");
 
 module.exports.getAllPublicWorkoutPrograms = async (req, res) => {
   res.send(await WorkoutProgram.getAllPublicWorkoutPrograms());
 };
 
-module.exports.getWorkoutProgram = async (req, res) => {
+module.exports.getWorkoutProgramByID = async (req, res) => {
   let workoutProgramID = req.params.workoutProgramID;
   workoutObj = await WorkoutProgram.getWorkoutProgramByID(workoutProgramID);
-  if (
-    workoutObj != null &&
-    (workoutObj.isPublic || workoutObj.createdBy == req.user.user._id)
-  ) {
-    res.send(workoutObj);
-  } else {
-    res.send("You are not authorized to view this information.");
+  if ( workoutObj != null ){
+    if (workoutObj.isPublic){
+      res.send(workoutObj);
+    }
+    else if (req.user){
+      if (workoutObj.createdBy == req.user.user._id){
+        res.send(workoutObj);
+      }
+    }else{
+      res.send("You are not authorized to view this information.");
+    }
+    
+  }else{
+    res.send("Invalid Workout Program ID");
   }
 };
 
@@ -30,7 +36,6 @@ module.exports.addWorkoutProgram = async (req, res) => {
       nameOfProgram,
       createdBy
     ).save();
-    UserController.addWorkoutProgramToUser(workoutProgram._id);
     res.send("A new workout plan was created");
   } else {
     res.send("Could not create a workout plan.");
