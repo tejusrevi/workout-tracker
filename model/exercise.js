@@ -20,8 +20,7 @@ class Exercise {
     try {
       let exerciseCollection = await _get_exercise_collection();
       let mongoObj = await exerciseCollection
-        .find({ id: exerciseID })
-        .toArray();
+        .findOne({ id: exerciseID })
       return mongoObj;
     } catch (err) {
       throw err;

@@ -39,7 +39,7 @@ function logoutUser() {
   };
 }
 
-describe("Workout Application - Tests with Mocha", function () {
+describe("Workout Application - Testing User resource", function () {
   describe("Test Models", function () {
     describe("User", function () {
       it("Test if user is invalid(Invalid Email)", async function () {
@@ -59,6 +59,10 @@ describe("Workout Application - Tests with Mocha", function () {
           await validation.validUserInfo(username, email, password).valid,
           true
         );
+        let user = new User(true, username, email, password)
+        assert.strictEqual(user.username, username);
+        assert.strictEqual(user.email, email);
+        assert.strictEqual(user.password, password);
       });
     });
   });

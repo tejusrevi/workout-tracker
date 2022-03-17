@@ -34,7 +34,30 @@ function logoutUser() {
   };
 }
 
-describe("Workout Application - Tests with Mocha", function () {
+describe("Workout Application - Testing WorkoutProgram resource", function () {
+  before(function (done) {
+    server
+      .post("/user")
+      .send({
+        isLocal: true,
+        username: "Dwayne Johnson",
+        email: "rock@mun.ca",
+        password: "password",
+      })
+      .expect(200)
+      .end(function (err, res) {
+        if (err) throw err;
+        return done()
+      });
+  });
+
+  after(function (done) {
+    server.delete("/user").end(function (err, res) {
+      if (err) throw err;
+      return done()
+    });
+  });
+
   describe("Test Models", function () {
     describe("WorkoutProgram", function () {
       it("Test if WorkoutProgram is invalid(empty nameOfProgram)", async function () {
@@ -52,6 +75,9 @@ describe("Workout Application - Tests with Mocha", function () {
           validation.validWorkoutProgramInfo(isPublic, nameOfProgram).valid,
           true
         );
+        let workoutProgram = new WorkoutProgram(isPublic, nameOfProgram)
+        assert.strictEqual(workoutProgram.isPublic, isPublic);
+        assert.strictEqual(workoutProgram.nameOfProgram, nameOfProgram);
       });
     });
   });
@@ -125,6 +151,7 @@ describe("Workout Application - Tests with Mocha", function () {
             return done();
           });
       });
+      it("Login user", loginUser());
       it("Success 1 - Create Workout Programs as an authenticated user (private program)", function (done) {
         server
           .post("/workoutProgram")
@@ -143,7 +170,7 @@ describe("Workout Application - Tests with Mocha", function () {
             return done();
           });
       });
-      it("Success 1 - Create Workout Programs as an authenticated user (public program)", function (done) {
+      it("Success 2 - Create Workout Programs as an authenticated user (public program)", function (done) {
         server
           .post("/workoutProgram")
           .send({
@@ -157,7 +184,6 @@ describe("Workout Application - Tests with Mocha", function () {
               res.body.message,
               "A new workout program was created."
             );
-            console.log(res.body);
             publicProgramID = res.body.insertedID;
             return done();
           });
@@ -191,7 +217,7 @@ describe("Workout Application - Tests with Mocha", function () {
           });
       });
       it("Login user", loginUser());
-      it("Success 1 - Aunthenticated user trying to access private program", function (done) {
+      it("Success 1 - Authenticated user trying to access private program", function (done) {
         server
           .get("/workoutProgram/" + privateProgramID)
           .end(function (err, res) {
@@ -200,6 +226,90 @@ describe("Workout Application - Tests with Mocha", function () {
               res.body.nameOfProgram,
               "Private 5-Day Abs Program"
             );
+            return done();
+          });
+      });
+    });
+    describe("PUT /workoutProgram/workoutProgramID", function () {
+      it("Logout user", logoutUser());
+      it("Fail 1 - Unauthenticated user trying to update public program's program name", function (done) {
+        server
+          .put("/workoutProgram/" + publicProgramID)
+          .send({
+            isPublic: 0,
+            nameOfProgram: "Private 10-Day Chest Program",
+          })
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, false);
+            assert.strictEqual(
+              res.body.message,
+              "User needs to be authenticated to perform this action."
+            );
+
+            return done();
+          });
+      });
+      it("Login user", loginUser());
+      it("Success 1 - Authenticated user trying to update public program's program name", function (done) {
+        server
+          .put("/workoutProgram/" + publicProgramID)
+          .send({
+            isPublic: 1,
+            nameOfProgram: "Public 10-Day Chest Program",
+          })
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, true);
+            assert.strictEqual(res.body.message, "Workout Plan was updated.");
+            return done();
+          });
+      });
+    });
+
+    describe("GET /workoutProgram", function () {
+      it("Logout user", logoutUser());
+      it("Success 1 - Unuthenticated user trying to access all workout programs", function (done) {
+        server.get("/workoutProgram/").end(function (err, res) {
+          if (err) return done(err);
+          assert.strictEqual(res.body.length, 1);
+          return done();
+        });
+      });
+    });
+    describe("DELETE /workoutProgram/:workoutProgramID", function () {
+      it("Logout user", logoutUser());
+      it("Fail 1 - Unauthenticated user trying to delete workout programs", function (done) {
+        server
+          .delete("/workoutProgram/" + publicProgramID)
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, false);
+            assert.strictEqual(
+              res.body.message,
+              "User needs to be authenticated to perform this action."
+            );
+            return done();
+          });
+      });
+      it("Login user", loginUser());
+      it("Success 1 - Authenticated user trying to delete workout programs (public)", function (done) {
+        server
+          .delete("/workoutProgram/" + publicProgramID)
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, true);
+            assert.strictEqual(res.body.message, "Workout Plan was deleted.");
+            return done();
+          });
+      });
+      it("Success 2 - Authenticated user trying to delete workout programs (private)", function (done) {
+        server
+          .delete("/workoutProgram/" + privateProgramID)
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, true);
+            assert.strictEqual(res.body.message, "Workout Plan was deleted.");
             return done();
           });
       });

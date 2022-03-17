@@ -117,7 +117,7 @@ module.exports.updateWorkoutProgram = async (req, res) => {
       )
       msg = {
         success: true,
-        message: "Workout Plan was deleted."
+        message: "Workout Plan was updated."
       }
   } else {
     msg = {
