@@ -9,6 +9,8 @@ var server = request.agent(myurl);
 let publicProgramID;
 let privateProgramID;
 
+let exerciseID;
+
 function loginUser() {
   return function (done) {
     server
@@ -47,14 +49,14 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
       .expect(200)
       .end(function (err, res) {
         if (err) throw err;
-        return done()
+        return done();
       });
   });
 
   after(function (done) {
     server.delete("/user").end(function (err, res) {
       if (err) throw err;
-      return done()
+      return done();
     });
   });
 
@@ -75,8 +77,8 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
           validation.validWorkoutProgramInfo(isPublic, nameOfProgram).valid,
           true
         );
-        let workoutProgram = new WorkoutProgram(isPublic, nameOfProgram)
-        assert.strictEqual(workoutProgram.isPublic, isPublic);
+        let workoutProgram = new WorkoutProgram(isPublic, nameOfProgram);
+        assert.strictEqual(workoutProgram.isPublic, false);
         assert.strictEqual(workoutProgram.nameOfProgram, nameOfProgram);
       });
     });
@@ -275,6 +277,37 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
           assert.strictEqual(res.body.length, 1);
           return done();
         });
+      });
+    });
+    describe("PUT /workoutProgram/addExercise/:workoutProgramID", function () {
+      it("Login user", loginUser());
+      it("Success 1 - Authenticated user trying to add an exercise to (public) workout program", function (done) {
+        server
+          .put("/workoutProgram/addExercise/" + publicProgramID)
+          .send({
+            exerciseID: 0047,
+            numSets: 4,
+            numReps: 12
+          })
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, true);
+            assert.strictEqual(res.body.message, 'Exercise was addedd to workout program.');
+            return done();
+          });
+      });
+      it("Success 1 - Authenticated user trying to remove an exercise from (public) workout program", function (done) {
+        server
+          .put("/workoutProgram/removeExercise/" + publicProgramID)
+          .query({
+            exerciseID: exerciseID
+          })
+          .end(function (err, res) {
+            if (err) return done(err);
+            assert.strictEqual(res.body.success, true);
+            assert.strictEqual(res.body.message, 'Exercise removed from workout program.');
+            return done();
+          });
       });
     });
     describe("DELETE /workoutProgram/:workoutProgramID", function () {
