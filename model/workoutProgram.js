@@ -22,10 +22,11 @@ class WorkoutProgram {
     try {
       let collection = await _get_users_collection();
       let mongoObj = await collection.insertOne(this);
-      return mongoObj;
+      return true;
     } catch (err) {
       throw err;
     }
+    return false
   }
 
   static async getWorkoutProgramByID(workoutProgramID) {

@@ -1,7 +1,9 @@
+
 const express = require("express");
 const session = require("express-session");
 var path = require("path");
 const passport = require("passport");
+
 
 const app = express();
 const port = 3000;
@@ -16,6 +18,7 @@ app.use(
     saveUninitialized: true,
   })
 );
+
 app.use(passport.initialize()); // init passport on every route call
 app.use(passport.session()); //allow passport to use "express-session"
 
@@ -56,6 +59,8 @@ async function createServer() {
         failureRedirect: "/",
       })
     );
+
+    app.get("/logout", auth.checkAuthenticated, userController.logout); // Receives userID from the session
 
     app.get("/user", auth.checkAuthenticated, userController.getUserByID); // Receives userID from the session
     app.post("/user", userController.addLocal);

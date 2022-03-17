@@ -10,7 +10,7 @@ var errorMessage;
  * @returns
  */
 module.exports.validUserInfo = (username, email, password) => {
-  errorMessage = "";
+  errorMessage = [];
   if (validUsername(username) & validEmail(email) & validPassword(password)) {
     return { valid: true };
   } else {
@@ -19,28 +19,28 @@ module.exports.validUserInfo = (username, email, password) => {
 };
 
 validUsername = (username) => {
-  if (username == "") {
-    errorMessage += "Please enter an username <br/>";
+  if (username == "" || username == undefined) {
+    errorMessage.push("Please enter an username");
     return false;
   }
   return true;
 };
 
 validEmail = (email) => {
-  if (email == "") {
-    errorMessage += "Please enter an email address <br/>";
+  if (email == "" || email == undefined) {
+    errorMessage.push("Please enter an email address");
     return false;
   }
   if (!emailValidator.validate(email)) {
-    errorMessage += "Invalid email address <br/>";
+    errorMessage.push("Invalid email address");
     return false;
   }
   return true;
 };
 
 validPassword = (password) => {
-  if (password == "") {
-    errorMessage += "Please enter a password <br/>";
+  if (password == "" || password == undefined) {
+    errorMessage.push("Please enter a password");
     return false;
   }
   return true;
@@ -62,7 +62,7 @@ module.exports.validPersonalInfo = (
   weight,
   goalWeight
 ) => {
-  errorMessage = "";
+  errorMessage = [];
   if (
     validAge(age) &
     validGender(gender) &
@@ -77,56 +77,43 @@ module.exports.validPersonalInfo = (
 };
 
 validAge = (age) => {
-  if (age != null) {
-    if (isNaN(age)) {
-      errorMessage += "Age must be a valid number <br/>";
-      return false;
-    }
-    return true;
+  if (isNaN(age)) {
+    errorMessage.push("Age must be a valid number");
+    return false;
   }
   return true;
+
 };
 
 validGender = (gender) => {
-  if (gender != null) {
-    if (gender != "male" && gender != "female" && gender != "other") {
-      errorMessage += "Illegal value for gender <br/>";
-      return false;
-    }
-    return true;
+  if (gender != "male" && gender != "female" && gender != "other") {
+    errorMessage.push("Illegal value for gender");
+    return false;
   }
   return true;
+
 };
 
 validHeight = (height) => {
-  if (height != null) {
-    if (isNaN(height)) {
-      errorMessage += "Height must be a valid number <br/>";
-      return false;
-    }
-    return true;
+  if (isNaN(height)) {
+    errorMessage.push("Height must be a valid number");
+    return false;
   }
   return true;
 };
 
 validWeight = (weight) => {
-  if (weight != null) {
-    if (isNaN(weight)) {
-      errorMessage += "Weight must be a valid number <br/>";
-      return false;
-    }
-    return true;
+  if (isNaN(weight)) {
+    errorMessage.push("Weight must be a valid number");
+    return false;
   }
   return true;
 };
 
 validGoalWeight = (goalWeight) => {
-  if (goalWeight != null) {
-    if (isNaN(goalWeight)) {
-      errorMessage += "Goal Weight must be a valid number <br/>";
-      return false;
-    }
-    return true;
+  if (isNaN(goalWeight)) {
+    errorMessage.push("Goal Weight must be a valid number");
+    return false;
   }
   return true;
 };

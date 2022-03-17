@@ -57,9 +57,9 @@ class User {
       let collection = await _get_users_collection();
       let mongoObj = await collection.deleteOne({ _id: ObjectId(userID) });
       if (mongoObj.deletedCount == 1) {
-        return "1 User was deleted";
+        return true;
       } else {
-        return "Error in deleting " + userID;
+        return false;
       }
     } catch (err) {
       throw err;
@@ -90,10 +90,10 @@ class User {
           }
         );
       }
-      if (mongoObj.modifiedCount == 1) {
-        return "Your profile has been updated.";
+      if (mongoObj.modifiedCount >= 1) {
+        return true;
       } else {
-        return "No updates were made.";
+        return false;
       }
     } catch (err) {
       throw err;
@@ -179,9 +179,9 @@ class User {
       }
 
       if (modified) {
-        return "Your personal information was updated";
+        return true;
       } else {
-        return "No changes were made";
+        return false;
       }
     } catch (err) {
       throw err;

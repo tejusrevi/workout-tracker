@@ -5,12 +5,13 @@ const validator = require("../utils/validate-fields.js");
 module.exports.getUserByID = async (req, res) => {
   let userID = req.user.user._id;
   res.send(await User.getUserByID(userID));
-}
+};
 
 module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
   let password = req.body.password;
+  let msg = {}
 
   let isFormValid = validator.validUserInfo(username, email, password);
   if (isFormValid.valid) {
@@ -18,20 +19,43 @@ module.exports.addLocal = async (req, res) => {
     let new_user = new User(true, username, email, hashedPassword);
     let userInserted = await new_user.save();
     if (userInserted) {
-      msg = "User " + username + " was correctly inserted to the database.";
+      msg = {
+        success: true,
+        message:
+          "User " + username + " was correctly inserted to the database.",
+      };
     } else {
-      msg = "Email address already exists. Try logging in.";
+      msg = {
+        success: false,
+        message: "Email address already exists. Try logging in.",
+      };
     }
   } else {
-    msg = isFormValid.errorMessage;
+    msg = {
+      success: false,
+      message: isFormValid.errorMessage,
+    };
   }
   res.send(msg);
 };
 
 module.exports.deleteUser = async (req, res) => {
   let userID = req.user.user._id;
-  let msg = await User.deleteUser(userID);
-  req.logout();
+  let wasDeleted = await User.deleteUser(userID);
+  let msg = {}
+
+  if (wasDeleted) {
+    msg = {
+      success: true,
+      message: "User was deleted.",
+    };
+    req.logout();
+  } else {
+    msg = {
+      success: false,
+      message: "User was not deleted.",
+    };
+  }
   res.send(msg);
 };
 
@@ -40,7 +64,7 @@ module.exports.updateUser = async (req, res) => {
   let newUsername = req.body.username;
   let newPassword = req.body.password;
 
-  let msg;
+  let msg = {};
   let hashedNewPassword;
 
   let isUserValid = validator.validUserInfo(
@@ -50,21 +74,33 @@ module.exports.updateUser = async (req, res) => {
   );
 
   if (isUserValid.valid) {
-    if (newPassword != null) {
-      if (req.user.user.isLocal) {
-        hashedNewPassword = passwordHash.generate(newPassword);
-      } else {
-        res.send(
-          "Your account uses Google login. You cannot change your password here."
-        );
+    if (req.user.user.isLocal) {
+      hashedNewPassword = passwordHash.generate(newPassword);
+      let wasUpdated = await User.updateUser(
+        userID,
+        newUsername,
+        hashedNewPassword
+      );
+      if (wasUpdated) {
+        req.logout();
+        msg = {
+          success: true,
+          message: "User was updated.",
+        };
       }
+    } else {
+      msg = {
+        success: false,
+        message: "User doesn't use local authentication.",
+      };
     }
-    msg = await User.updateUser(userID, newUsername, hashedNewPassword);
-    req.logout();
-    res.send(msg);
   } else {
-    res.send(isUserValid.errorMessage);
+    msg = {
+      success: false,
+      message: isUserValid.errorMessage,
+    };
   }
+  res.send(msg);
 };
 
 module.exports.updatePersonalInformation = async (req, res) => {
@@ -74,6 +110,7 @@ module.exports.updatePersonalInformation = async (req, res) => {
   let height = req.body.height;
   let weight = req.body.weight;
   let goalWeight = req.body.goalWeight;
+  let msg = {};
   let isPersonalInfoValid = validator.validPersonalInfo(
     age,
     gender,
@@ -81,10 +118,9 @@ module.exports.updatePersonalInformation = async (req, res) => {
     weight,
     goalWeight
   );
-
+  
   if (isPersonalInfoValid.valid) {
-    res.send(
-      await User.updatePersonalInfo(
+    let wasUpdated = await User.updatePersonalInfo(
         userID,
         age,
         gender,
@@ -92,10 +128,31 @@ module.exports.updatePersonalInformation = async (req, res) => {
         weight,
         goalWeight
       )
-    );
+
+    if (wasUpdated) {
+      msg = {
+        success: true,
+        message: "User was updated.",
+      };
+    } else {
+      msg = {
+        success: false,
+        message: "User was not updated.",
+      };
+    }
   } else {
-    res.send(isUserValid.errorMessage);
+    msg = {
+      success: false,
+      message: isPersonalInfoValid.errorMessage,
+    };
   }
+  res.send(msg);
 };
 
-
+module.exports.logout = async (req, res) => {
+  req.logout();
+  res.send({
+    success: true,
+    message: 'Successfully logged out.'
+  })
+}

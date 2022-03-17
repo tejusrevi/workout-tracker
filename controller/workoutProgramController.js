@@ -17,11 +17,16 @@ module.exports.getWorkoutProgramByID = async (req, res) => {
         res.send(workoutObj);
       }
     }else{
-      res.send("You are not authorized to view this information.");
+      res.send({
+        success: false,
+        message: "You are not authorized to view this information."
+      });
     }
-    
   }else{
-    res.send("Invalid Workout Program ID");
+    res.send({
+      success: false,
+      message: "Invalid Workout Program ID"
+    });
   }
 };
 
@@ -30,25 +35,36 @@ module.exports.addWorkoutProgram = async (req, res) => {
   let nameOfProgram = req.body.nameOfProgram;
   let createdBy = req.user.user._id;
 
+  let wasCreated = false;
+  let msg = {};
+
   if (isPublic && nameOfProgram) {
-    let workoutProgram = await new WorkoutProgram(
+    wasCreated = await new WorkoutProgram(
       isPublic,
       nameOfProgram,
       createdBy
     ).save();
-    res.send("A new workout plan was created");
+    msg = {
+      success: true,
+      message: "A new workout program was created."
+    }
   } else {
-    res.send("Could not create a workout plan.");
+    msg = {
+      success: false,
+      message: "Missing values for isPublic and nameOfWorkout."
+    }
   }
+  res.send(msg)
 };
 
 module.exports.deleteWorkoutProgram = async (req, res) => {
   let workoutProgramID = req.params.workoutProgramID;
-  workoutObj = await WorkoutProgram.getWorkoutProgramByID(workoutProgramID);
+  let workoutObj = await WorkoutProgram.getWorkoutProgramByID(workoutProgramID);
+  let wasDeleted = false;
   if (workoutObj == null) {
     res.send("Invalid ID.");
   } else if (workoutObj.createdBy == req.user.user._id) {
-    res.send(await WorkoutProgram.deleteWorkoutProgram(workoutProgramID));
+    wasDeleted = await WorkoutProgram.deleteWorkoutProgram(workoutProgramID));
   } else {
     res.send("You are not authorized to delete this information.");
   }

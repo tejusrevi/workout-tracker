@@ -61,7 +61,14 @@ checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/");
+  else{
+    res.send(
+      {
+        success: false,
+        message: "User needs to be authenticated to perform this action."
+      }
+    );
+  }
 };
 
 module.exports = { checkAuthenticated };
