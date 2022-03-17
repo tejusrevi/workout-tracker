@@ -1,9 +1,7 @@
-
 const express = require("express");
 const session = require("express-session");
 var path = require("path");
 const passport = require("passport");
-
 
 const app = express();
 const port = 3000;
@@ -115,7 +113,7 @@ async function createServer() {
       "/user/workoutPrograms",
       auth.checkAuthenticated,
       workoutProgramController.getWorkoutProgramsByUser
-    )
+    );
 
     // start the server
     server = app.listen(port, () => {

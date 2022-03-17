@@ -2,13 +2,6 @@ var emailValidator = require("email-validator");
 
 var errorMessage;
 
-/**
- * Validator for User Object
- * @param {*} username
- * @param {*} email
- * @param {*} password
- * @returns
- */
 module.exports.validUserInfo = (username, email, password) => {
   errorMessage = [];
   if (validUsername(username) & validEmail(email) & validPassword(password)) {
@@ -117,3 +110,28 @@ validGoalWeight = (goalWeight) => {
   }
   return true;
 };
+
+module.exports.validWorkoutProgramInfo = (isPublic, nameOfProgram) => {
+  errorMessage = [];
+  if (validIsPublic(isPublic) & validNameOfProgram(nameOfProgram)) {
+    return { valid: true };
+  } else {
+    return { valid: false, errorMessage: errorMessage };
+  }
+}
+
+validIsPublic = (isPublic) => {
+  if ((isPublic != '0' && isPublic != '1') || isPublic == undefined) {
+    errorMessage.push("Invalid value for isPublic");
+    return false;
+  }
+  return true;
+}
+
+validNameOfProgram = (nameOfProgram) => {
+  if (nameOfProgram == "" || nameOfProgram == undefined) {
+    errorMessage.push("Name of Program cannot be empty");
+    return false;
+  }
+  return true;
+}

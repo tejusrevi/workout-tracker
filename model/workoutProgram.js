@@ -22,11 +22,10 @@ class WorkoutProgram {
     try {
       let collection = await _get_users_collection();
       let mongoObj = await collection.insertOne(this);
-      return true;
+      return mongoObj.insertedId
     } catch (err) {
       throw err;
     }
-    return false
   }
 
   static async getWorkoutProgramByID(workoutProgramID) {
@@ -62,9 +61,9 @@ class WorkoutProgram {
         _id: ObjectId(workoutProgramID),
       });
       if (mongoObj.deletedCount == 1) {
-        return "Workout plan was deleted.";
+        return true;
       } else {
-        return "Could not delete workout plan.";
+        return false;
       }
     } catch (err) {
       throw err;
@@ -107,9 +106,9 @@ class WorkoutProgram {
       }
 
       if (mongoObj.modifiedCount == 1) {
-        return "Workout plan was updated.";
+        return true;
       } else {
-        return "Could not update workout plan.";
+        return false;
       }
     } catch (err) {
       throw err;
@@ -129,9 +128,9 @@ class WorkoutProgram {
         }
       );
       if (mongoObj.modifiedCount == 1) {
-        return "Exercise was added.";
+        return true;
       } else {
-        return "Could not add exercise.";
+        return false;
       }
     }catch(err){
       throw err;
@@ -153,9 +152,9 @@ class WorkoutProgram {
         }
       );
       if (mongoObj.modifiedCount == 1) {
-        return "Exercise was removed.";
+        return true;
       } else {
-        return "Could not remove exercise.";
+        return false;
       }
     }catch(err){
       throw err;

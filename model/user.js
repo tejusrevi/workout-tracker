@@ -206,7 +206,7 @@ class User {
       try {
         let collection = await _get_users_collection();
         let mongoObj = await collection.findOne({ email: email });
-        return mongoObj.password;
+        if (mongoObj) return mongoObj.password;
       } catch (err) {
         throw err;
       }
