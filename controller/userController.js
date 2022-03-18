@@ -1,6 +1,19 @@
+/**
+ * @author Tejus Revi, Mahek Parmar 
+ * @version 1.0 
+ * Date: March 13, 2022
+ * This script acts as the controller for the user object
+ * We carry out several operations on the user object, 
+ * using the functionalities provided by this script.
+ *  
+ */
+
+
+
 let passwordHash = require("password-hash");
 const User = require("../model/user.js").User;
 const validator = require("../utils/validate-fields.js");
+
 
 module.exports.getUserByID = async (req, res) => {
   let userID = req.user.user._id;
@@ -39,6 +52,11 @@ module.exports.addLocal = async (req, res) => {
   res.send(msg);
 };
 
+/**
+ * A function that deletes a user provided the user id
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.deleteUser = async (req, res) => {
   let userID = req.user.user._id;
   let wasDeleted = await User.deleteUser(userID);
@@ -59,8 +77,14 @@ module.exports.deleteUser = async (req, res) => {
   res.send(msg);
 };
 
+/**
+ * A function that updates the user primary/core details
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.updateUser = async (req, res) => {
   let userID = req.user.user._id;
+  //parameters for this function are provided via the request body
   let newUsername = req.body.username;
   let newPassword = req.body.password;
 
@@ -75,14 +99,14 @@ module.exports.updateUser = async (req, res) => {
 
   if (isUserValid.valid) {
     if (req.user.user.isLocal) {
-      hashedNewPassword = passwordHash.generate(newPassword);
-      let wasUpdated = await User.updateUser(
+      hashedNewPassword = passwordHash.generate(newPassword);       //storing the hashed password
+      let wasUpdated = await User.updateUser(         //calling updateUser method of User
         userID,
         newUsername,
         hashedNewPassword
       );
       if (wasUpdated) {
-        req.logout();
+        req.logout();                 //updating the core information logs the user out
         msg = {
           success: true,
           message: "User was updated.",
@@ -103,8 +127,15 @@ module.exports.updateUser = async (req, res) => {
   res.send(msg);
 };
 
+/**
+ * A function that updates the user secondary details
+ * @param {*} req 
+ * @param {*} res 
+ */
+
 module.exports.updatePersonalInformation = async (req, res) => {
   let userID = req.user.user._id;
+  //parameters to do so are passed via the request body
   let age = req.body.age;
   let gender = req.body.gender;
   let height = req.body.height;
@@ -120,7 +151,7 @@ module.exports.updatePersonalInformation = async (req, res) => {
   );
   
   if (isPersonalInfoValid.valid) {
-    let wasUpdated = await User.updatePersonalInfo(
+    let wasUpdated = await User.updatePersonalInfo(       //updating the user's seconday info if valid
         userID,
         age,
         gender,
@@ -148,6 +179,12 @@ module.exports.updatePersonalInformation = async (req, res) => {
   }
   res.send(msg);
 };
+
+/**
+ * A function that logs the user out
+ * @param {*} req 
+ * @param {*} res 
+ */
 
 module.exports.logout = async (req, res) => {
   req.logout();
