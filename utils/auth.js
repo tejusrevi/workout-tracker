@@ -15,7 +15,7 @@ const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_SECRET
 );
 
-// Google Strategy
+// Setting up Google Strategy
 authGoogleUser = async (request, accessToken, refreshToken, profile, done) => {
   oauth2Client.setCredentials({
     access_token: accessToken,
@@ -37,7 +37,7 @@ passport.use(
   )
 );
 
-//Local Strategy
+//Setting up Local Strategy
 authLocalUser = async (email, password, done) => {
   if (await User.authenticateUser(email, password)) {
     userObj = await User.getUserDetails(email);
@@ -49,25 +49,25 @@ authLocalUser = async (email, password, done) => {
 
 passport.use(new LocalStrategy({ usernameField: "email" }, authLocalUser));
 
+// Serializing user
 passport.serializeUser((user, done) => {
   done(null, user);
 });
 
+// Deserializing user
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
+// Checks if the request is made from an authenticated session
 checkAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
-  }
-  else{
-    res.send(
-      {
-        success: false,
-        message: "User needs to be authenticated to perform this action."
-      }
-    );
+  } else {
+    res.send({
+      success: false,
+      message: "User needs to be authenticated to perform this action.",
+    });
   }
 };
 

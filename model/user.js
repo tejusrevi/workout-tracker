@@ -1,30 +1,28 @@
 /**
  * @author Tejus Revi, Mahek Parmar
- * @version 1.0 
+ * @version 1.0
  * Date: March 13, 2022
  * This script models a user object and provides several methods which
  * represent its functionality and behaviour.
  */
-
-
 
 const client = require("../utils/db.js");
 const ObjectId = require("mongodb").ObjectId;
 var passwordHash = require("password-hash");
 
 /*
-* This method gets us the user collection from the mongoDb database
-* @return user collection
-*/
+ * This method gets us the user collection from the mongoDb database
+ * @return user collection
+ */
 async function _get_users_collection() {
   let db = await client.getDb();
   return await db.collection("user");
 }
 
 /*
-* The constructor to create a User object
-*
-*/
+ * The constructor to create a User object
+ *
+ */
 class User {
   constructor(isLocal, username, email, password) {
     // Core user information. Any updates made to this information will logout the user
@@ -57,16 +55,16 @@ class User {
     }
   }
 
-   /**
+  /**
    * ???????????????????????????
-   * @param {String} userID, the ObjectId of the user, passed as a string 
+   * @param {String} userID, the ObjectId of the user, passed as a string
    * @returns {User} mongoObj, the User object
    */
   static async getUserByID(userID) {
     try {
       let collection = await _get_users_collection();
       let mongoObj = await collection.findOne({ _id: ObjectId(userID) });
-      delete mongoObj._id;                              //??????????????
+      delete mongoObj._id; //??????????????
       delete mongoObj.password;
       delete mongoObj.isLocal;
       return mongoObj;
@@ -158,7 +156,7 @@ class User {
     let mongoObj;
     let modified = false;
     try {
-      let collection = await _get_users_collection();       //get the users collection
+      let collection = await _get_users_collection(); //get the users collection
       if (age != undefined) {
         //first we update the age, if provided
         mongoObj = await collection.updateOne(
@@ -240,8 +238,7 @@ class User {
     }
   }
 
-
-    /**
+  /**
    * This function check if a user corresponding to the provided email address exists in the user collection or not
    * @param {String} email, the email address we are searching for
    * @returns {Boolean} true if no user with the provided email address was found, else false
@@ -260,7 +257,7 @@ class User {
   }
 
   static async getPasswordFor(email) {
-    if (!await User.emailDoesNotExists(email)) {
+    if (!(await User.emailDoesNotExists(email))) {
       try {
         let collection = await _get_users_collection();
         let mongoObj = await collection.findOne({ email: email });
@@ -293,7 +290,6 @@ class User {
       return true;
     return false;
   }
-
 }
 
 module.exports.User = User;

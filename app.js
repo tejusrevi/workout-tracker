@@ -32,7 +32,7 @@ async function createServer() {
     await mongo.connectToDB();
 
     app.get("/", (req, res) => {
-      res.sendFile(path.resolve("view/index.html"));
+      res.sendFile(path.resolve("view/index.html")); // Homepage
     });
 
     // Local auth
@@ -50,6 +50,7 @@ async function createServer() {
       passport.authenticate("google", { scope: ["email", "profile"] })
     );
 
+    // Callback function for google auth
     app.get(
       "/auth/google/callback",
       passport.authenticate("google", {
@@ -58,7 +59,8 @@ async function createServer() {
       })
     );
 
-    app.get("/user", auth.checkAuthenticated, userController.getUserByID); // Receives userID from the session
+    // CRUD operations on User model
+    app.get("/user", auth.checkAuthenticated, userController.getUserByID);
     app.post("/user", userController.addLocal);
     app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
     app.put("/user", auth.checkAuthenticated, userController.updateUser);
@@ -67,10 +69,13 @@ async function createServer() {
       auth.checkAuthenticated,
       userController.updatePersonalInformation
     );
+    app.get(
+      "/user/workoutPrograms",
+      auth.checkAuthenticated,
+      workoutProgramController.getWorkoutProgramsByUser
+    );
 
-    app.get("/exercise/:exerciseID", exerciseController.getExerciseByID);
-    app.get("/exercise", exerciseController.getAllExercise);
-
+    // CRUD operations on WorkoutProgram model
     app.get(
       "/workoutProgram",
       workoutProgramController.getAllPublicWorkoutPrograms
@@ -107,12 +112,11 @@ async function createServer() {
       workoutProgramController.removeExerciseFromWorkoutProgram
     );
 
-    app.get(
-      "/user/workoutPrograms",
-      auth.checkAuthenticated,
-      workoutProgramController.getWorkoutProgramsByUser
-    );
+    // Read operations on Exercise Model
+    app.get("/exercise/:exerciseID", exerciseController.getExerciseByID);
+    app.get("/exercise", exerciseController.getAllExercise);
 
+    // Logout the current user
     app.get("/logout", auth.checkAuthenticated, userController.logout); // Receives userID from the session
 
     // start the server
