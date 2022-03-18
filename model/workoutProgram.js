@@ -70,7 +70,7 @@ class WorkoutProgram {
     }
   }
 
-  static async updateWorkoutProgram(
+  static async updateWorkoutProgramDetails(
     workoutProgramID,
     newIsPublic,
     newNameOfProgram

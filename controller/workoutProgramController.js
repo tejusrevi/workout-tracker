@@ -98,7 +98,7 @@ module.exports.deleteWorkoutProgram = async (req, res) => {
   res.send(msg)
 };
 
-module.exports.updateWorkoutProgram = async (req, res) => {
+module.exports.updateWorkoutProgramDetails = async (req, res) => {
   let workoutProgramID = req.params.workoutProgramID;
   let isPublic = req.body.isPublic;
   let nameOfProgram = req.body.nameOfProgram;
@@ -110,7 +110,7 @@ module.exports.updateWorkoutProgram = async (req, res) => {
       message: "Invalid Workout Program ID."
     }
   } else if (workoutObj.createdBy == req.user.user._id) {
-      await WorkoutProgram.updateWorkoutProgram(
+      await WorkoutProgram.updateWorkoutProgramDetails(
         workoutProgramID,
         isPublic,
         nameOfProgram

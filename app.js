@@ -58,8 +58,6 @@ async function createServer() {
       })
     );
 
-    app.get("/logout", auth.checkAuthenticated, userController.logout); // Receives userID from the session
-
     app.get("/user", auth.checkAuthenticated, userController.getUserByID); // Receives userID from the session
     app.post("/user", userController.addLocal);
     app.delete("/user", auth.checkAuthenticated, userController.deleteUser);
@@ -94,7 +92,7 @@ async function createServer() {
     app.put(
       "/workoutProgram/:workoutProgramID",
       auth.checkAuthenticated,
-      workoutProgramController.updateWorkoutProgram
+      workoutProgramController.updateWorkoutProgramDetails
     );
 
     app.put(
@@ -114,6 +112,8 @@ async function createServer() {
       auth.checkAuthenticated,
       workoutProgramController.getWorkoutProgramsByUser
     );
+
+    app.get("/logout", auth.checkAuthenticated, userController.logout); // Receives userID from the session
 
     // start the server
     server = app.listen(port, () => {
