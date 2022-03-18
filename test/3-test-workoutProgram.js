@@ -296,13 +296,13 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
           });
       });
     });
-    // Trying to make a get request to /workoutProgram as an aunauthenticated user. The request will return all public workout programs.
+    // Trying to make a get request to /workoutProgram as an unauthenticated user. The request will return all public workout programs.
     describe("GET /workoutProgram", function () {
       it("Logout user", logoutUser());
       it("Success 1 - Unuthenticated user trying to access all workout programs", function (done) {
         server.get("/workoutProgram/").end(function (err, res) {
           if (err) return done(err);
-          assert.strictEqual(res.body.length, 1);
+          assert.strictEqual(Array.isArray(res.body), true);
           return done();
         });
       });
