@@ -1,6 +1,7 @@
 const client = require("../utils/db.js");
 const ObjectId = require("mongodb").ObjectId;
 
+
 async function _get_exercise_collection() {
   let db = await client.getDb();
   return await db.collection("exercise");
