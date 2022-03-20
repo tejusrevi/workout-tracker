@@ -41,6 +41,10 @@ class User {
     };
   }
 
+  /**
+   * Saves the current instance of User class into exercise-tracker-db.user collection
+   * @returns  If the user was correctly inserted, then the function returns true. Else, it returns false.
+   */
   async save() {
     if (await User.emailDoesNotExists(this.email)) {
       try {
@@ -56,7 +60,7 @@ class User {
   }
 
   /**
-   * ???????????????????????????
+   * Returns a single user from the collection based on their user ID.
    * @param {String} userID, the ObjectId of the user, passed as a string
    * @returns {User} mongoObj, the User object
    */
@@ -64,7 +68,6 @@ class User {
     try {
       let collection = await _get_users_collection();
       let mongoObj = await collection.findOne({ _id: ObjectId(userID) });
-      delete mongoObj._id; //??????????????
       delete mongoObj.password;
       delete mongoObj.isLocal;
       return mongoObj;
@@ -256,6 +259,11 @@ class User {
     }
   }
 
+  /**
+   * This method finds and returns the hashed password for the user represented by the email parameter, provided that the email address exists in the collection.
+   * @param {*} email the email address we are searching for
+   * @returns returns hashed password for the user with the given email address
+   */
   static async getPasswordFor(email) {
     if (!(await User.emailDoesNotExists(email))) {
       try {
@@ -268,6 +276,11 @@ class User {
     }
   }
 
+  /**
+   * This function provides passport authentication middleware with information about the currently logged in user.
+   * @param {*} email the email address we are searching for
+   * @returns returns the user object represented by the email address
+   */
   static async getUserDetails(email) {
     try {
       let collection = await _get_users_collection();
@@ -278,13 +291,25 @@ class User {
     }
   }
 
+  /**
+   * Adds a non local User object into the database. A non local user is any user who has used Google Authentication to sign up.
+   * For nonLocal users, their passwords are not saved in the user collection. However, the email address is stored to avoid the user from creating another account.
+   * @param {*} username username of the user to be added
+   * @param {*} email email of the user to be added
+   */
   static async addNonLocal(username, email) {
     if (User.emailDoesNotExists(email)) {
-      let new_user = new User(false, username, email);
+      let new_user = new User(false, username, email, null);
       let msg = await new_user.save();
     }
   }
 
+  /**
+   * This function verifies if the password entered by the user matches the hashed password store in the user collection.
+   * @param {*} email email address of the user, whose passwors needs to be verifies
+   * @param {*} password password entered by the user
+   * @returns 
+   */
   static async authenticateUser(email, password) {
     if (passwordHash.verify(password, await User.getPasswordFor(email)))
       return true;

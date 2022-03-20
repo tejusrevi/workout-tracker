@@ -343,7 +343,7 @@ describe("Workout Application - Testing User resource", function () {
       });
 
       // Trying to make a put request to /user as authenticated user. The request will succeed, and display result of the operation.
-      it("Success 2. PUT - Update personal info of authenticated user", function (done) {
+      it("Success 3. PUT - Update personal info of authenticated user", function (done) {
         server
           .put("/user/personalInformation")
           .send({

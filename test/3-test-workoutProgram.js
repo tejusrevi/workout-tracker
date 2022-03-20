@@ -156,7 +156,7 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
       });
 
       // Trying to mke a post request to /workoutProgram as an authenticated user, but with no isPublic in bosy params. The request returns an error message.
-      it("Fail 4 - Authenticated user, but with missing isPublic", function (done) {
+      it("Fail 5 - Authenticated user, but with missing isPublic", function (done) {
         server
           .post("/workoutProgram")
           .send({
@@ -299,7 +299,7 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
     // Trying to make a get request to /workoutProgram as an unauthenticated user. The request will return all public workout programs.
     describe("GET /workoutProgram", function () {
       it("Logout user", logoutUser());
-      it("Success 1 - Unuthenticated user trying to access all workout programs", function (done) {
+      it("Success 2 - Unuthenticated user trying to access all workout programs", function (done) {
         server.get("/workoutProgram/").end(function (err, res) {
           if (err) return done(err);
           assert.strictEqual(Array.isArray(res.body), true);
@@ -331,7 +331,7 @@ describe("Workout Application - Testing WorkoutProgram resource", function () {
       });
 
       // Trying to make a put request to /workoutProgram/removeExercise/:workoutProgramID as an authenticated user. The request succeeds.
-      it("Success 1 - Authenticated user trying to remove an exercise from (public) workout program", function (done) {
+      it("Success 2 - Authenticated user trying to remove an exercise from (public) workout program", function (done) {
         server
           .put("/workoutProgram/removeExercise/" + publicProgramID)
           .query({
