@@ -12,11 +12,21 @@ let passwordHash = require("password-hash");
 const User = require("../model/user.js").User;
 const validator = require("../utils/validate-fields.js");
 
+/**
+ * Retrieves a user object from mongodb using the _id primary key
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.getUserByID = async (req, res) => {
   let userID = req.user.user._id;
   res.send(await User.getUserByID(userID));
 };
 
+/**
+ * Adds a new local user to the database. A local user is a user who has signed up for the application using Local Authentication Strategy, ie using email and password stored in our database.
+ * @param {*} req 
+ * @param {*} res 
+ */
 module.exports.addLocal = async (req, res) => {
   let username = req.body.username;
   let email = req.body.email;
