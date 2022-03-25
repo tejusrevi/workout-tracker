@@ -8,7 +8,6 @@ const port = 3000;
 
 app.use(express.json()); // support json encoded bodies
 app.use(express.urlencoded({ extended: true })); //incoming objects are strings or arrays
-
 app.use(
   session({
     secret: "secret",
@@ -27,19 +26,17 @@ const userController = require("./controller/userController.js");
 const exerciseController = require("./controller/exerciseController.js");
 const workoutProgramController = require("./controller/workoutProgramController.js");
 
+app.use(express.static(__dirname + "/view/public"));
+
 async function createServer() {
   try {
     await mongo.connectToDB();
-
-    app.get("/", (req, res) => {
-      res.sendFile(path.resolve("view/index.html")); // Homepage
-    });
 
     // Local auth
     app.post(
       "/auth/local",
       passport.authenticate("local", {
-        successRedirect: "/user",
+        successRedirect: "/dashboard",
         failureRedirect: "/",
       })
     );
@@ -54,7 +51,7 @@ async function createServer() {
     app.get(
       "/auth/google/callback",
       passport.authenticate("google", {
-        successRedirect: "/user",
+        successRedirect: "/dashboard",
         failureRedirect: "/",
       })
     );
@@ -118,6 +115,19 @@ async function createServer() {
 
     // Logout the current user
     app.get("/logout", auth.checkAuthenticated, userController.logout); // Receives userID from the session
+
+    //front-end
+    app.get("/dashboard", auth.checkAuthenticated, async (req, res) => {
+      res.sendFile(__dirname + '/view/dashboard.html')
+    }); 
+
+    app.get("/add-workout-program", auth.checkAuthenticated, async (req, res) => {
+      res.sendFile(__dirname + '/view/add-workout-program.html')
+    });
+
+    app.get("/edit-profile", auth.checkAuthenticated, async (req, res) => {
+      res.sendFile(__dirname + '/view/edit-profile.html')
+    });
 
     // start the server
     server = app.listen(port, () => {

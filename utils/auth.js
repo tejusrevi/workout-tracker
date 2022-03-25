@@ -21,7 +21,8 @@ authGoogleUser = async (request, accessToken, refreshToken, profile, done) => {
     access_token: accessToken,
     refresh_token: refreshToken,
   });
-  userObj = await User.addNonLocal(profile.displayName, profile.email);
+  await User.addNonLocal(profile.displayName, profile.email);
+  userObj = await User.getUserDetails(profile.email);
   return done(null, { user: userObj });
 };
 

@@ -7,7 +7,7 @@
  * using the functionalities provided by this script.
  *
  */
-
+var path = require("path");
 let passwordHash = require("password-hash");
 const User = require("../model/user.js").User;
 const validator = require("../utils/validate-fields.js");
