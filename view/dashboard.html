@@ -1,18 +1,516 @@
 <!DOCTYPE html>
-<head>
-  <title>Dashboard</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-</head>
 <html lang="en">
-  <h1>Dashboard</h1>
-  <div id="username"></div>
-  <a href="/add-workout-program">Add Workout Plan</a>
-  <a href="/edit-profile">Edit Profile</a>
-  <button onclick="func()">Click</button>
-  <div id="workout-programs">
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./stylesheet/style.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="dashboard-container" style="min-height: 100vh">
+      <div
+        class="d-flex flex-column flex-shrink-0 p-3 bg-light"
+        style="width: 20vw; min-height: 100%"
+      >
+        <a
+          href="/"
+          class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none"
+        >
+          <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap" />
+          </svg>
+          <span class="fs-4">Workout Log</span>
+        </a>
+        <hr />
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <button
+              id="home-nav"
+              class="btn btn-primary full-width-button link-dark active"
+              aria-current="page"
+            >
+              <i class="bi bi-house-fill"></i> Home
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              id="body-metrics-nav"
+              class="btn btn-primary full-width-button link-dark"
+            >
+              <i class="bi bi-bar-chart-fill"></i> Body Metrics
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              id="account-nav"
+              class="btn btn-primary full-width-button link-dark"
+            >
+              <i class="bi bi-person-fill"></i> Account
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              id="about-nav"
+              class="btn btn-primary full-width-button link-dark"
+            >
+              <i class="bi bi-info-circle-fill"></i> About
+            </button>
+          </li>
+        </ul>
+        <hr />
+        <button id="logout" class="btn btn-secondary">Logout</button>
+      </div>
+      <div id="render-area">
+        <div id="home" style="display: inline">
+          <div id="search-bar-container">
+            <div class="input-group rounded">
+              <input
+                type="search"
+                class="form-control rounded"
+                placeholder="Browse our catalogue of 1300+ workouts"
+                aria-label="Search"
+                aria-describedby="search-addon"
+                style="
+                  border: none;
+                  background-color: #f8f9fa;
+                  border-radius: 12px !important;
+                "
+              />
+              <span
+                class="input-group-text border-0"
+                id="search-addon"
+                style="
+                  padding: 10px;
+                  margin-left: 10px;
+                  border-radius: 10px;
+                  width: 44px;
+                  display: flex;
+                  justify-content: center;
+                "
+              >
+                <i class="bi bi-search"></i>
+              </span>
+            </div>
+          </div>
+          <div style="margin: 30px">
+            <div id="greeting">
+              <h1 style="margin-bottom: 0px">Hello,</h1>
+              <h2 id="greeting-username" style="font-weight: 300">
+                <span class="placeholder col-1"></span>
+              </h2>
+            </div>
+            <div>
+              <div style="padding-top: 30px">
+                <span
+                  style="
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                  "
+                  ><h4>Your Programs.</h4>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addNewWorkoutProgram"
+                  >
+                    <span style="font-size: small">Add New</span>
+                  </button></span
+                >
+                <div
+                  class="modal fade"
+                  id="addNewWorkoutProgram"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Add New Workout Program
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="new-program-row">
+                          <label for="name-of-program">Name of Program: </label>
+                          <input id="name-of-program-input" class="new-program-input"/>
+                        </div>
+                        <div class="new-program-row">
+                          <label for="is-public">Is Public: </label>
+                          <input id="is-public-input" class="new-program-input" type="checkbox" value="1">
+                        </div>
+                        
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button id="add-new-program" type="button" class="btn btn-primary">
+                          Create New Program
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="programs-by-user"">
+              </div>
+              <h4 style="margin-top: 30px">Programs by Community Members.</h4>
+              <div id="public-programs"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="body-metrics" style="display: none">
+        <div class="heading">
+          <h1 style="margin-bottom: 0px">Body Metrics</h1>
+        </div>
+        <div id="metrics-container" style="display: flex; flex-direction: row">
+          <div class="card metrics-card" style="height: 30rem; width: 50%">
+            <h3 style="margin-bottom: 10px">Stats</h3>
+            <div id="view-body-metrics">
+              <span class="metric-row">
+                <label for="age" class="metric-label">Age: </label>
+                <span id="age"></span>
+              </span>
+              <span class="metric-row">
+                <label for="gender" class="metric-label">Gender: </label>
+                <span id="gender"></span>
+              </span>
+              <span class="metric-row">
+                <label for="height" class="metric-label">Height: </label>
+                <span id="height"></span>
+              </span>
+              <span class="metric-row">
+                <label for="weight" class="metric-label">Weight: </label>
+                <span id="weight"></span>
+              </span>
+              <span class="metric-row">
+                <label for="goal-weight" class="metric-label"
+                  >Goal Weight:
+                </label>
+                <span id="goal-weight">80 kg</span>
+              </span>
+              <button
+                id="edit-body-metrics-button"
+                class="btn btn-primary metric-row"
+                style="margin-top: 20px; justify-content: space-evenly"
+              >
+                <i class="bi bi-pencil-fill"></i>
+                Edit
+              </button>
+            </div>
+            <div id="edit-body-metrics" style="display: none">
+              <span class="metric-row">
+                <label for="age" class="metric-label">Age: </label>
+                <input
+                  id="age-input"
+                  class="metric-input-text"
+                  type="number"
+                  min="0"
+                />
+              </span>
+              <span class="metric-row">
+                <label for="gender" class="metric-label">Gender: </label>
+                <select id="gender-input" class="metric-input-text">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </span>
+              <span class="metric-row">
+                <label for="height" class="metric-label">Height: </label>
+                <input
+                  id="height-input"
+                  class="metric-input-text"
+                  type="number"
+                  min="0"
+                />
+              </span>
+              <span class="metric-row">
+                <label for="weight" class="metric-label">Weight: </label>
+                <input
+                  id="weight-input"
+                  class="metric-input-text"
+                  type="number"
+                  min="0"
+                />
+              </span>
+              <span class="metric-row">
+                <label for="goal-weight" class="metric-label"
+                  >Goal Weight:
+                </label>
+                <input
+                  id="goal-weight-input"
+                  class="metric-input-text"
+                  type="number"
+                  min="0"
+                />
+              </span>
+              <button
+                id="save-body-metrics-button"
+                class="metric-row btn btn-primary"
+                style="margin-top: 20px; justify-content: space-evenly"
+              >
+                <i class="bi bi-pencil-fill"></i>
+                Save
+              </button>
+            </div>
+            <div
+              id="body-metrics-alert-danger"
+              class="alert alert-danger"
+              role="alert"
+              style="
+                display: none;
+                padding: 5px;
+                margin-top: 10px;
+                text-align: center;
+                font-size: small;
+              "
+            ></div>
+            <div
+              id="body-metrics-alert-success"
+              class="alert alert-success"
+              role="alert"
+              style="
+                display: none;
+                padding: 5px;
+                margin-top: 10px;
+                text-align: center;
+                font-size: small;
+              "
+            ></div>
+          </div>
+          <div style="width: 50%">
+            <div class="card metrics-card" style="height: 14rem; width: 90%">
+              <h3 style="margin-bottom: 10px">BMI</h3>
+              <h1
+                id="bmi-number"
+                style="text-align: center; width: 100%; font-weight: 300"
+              >
+                22
+              </h1>
+              <div id="bmi-text" style="text-align: center; width: 100%">
+                Your BMI is average
+              </div>
+            </div>
+            <div class="card metrics-card" style="height: 14rem; width: 90%">
+              <h3 style="margin-bottom: 10px">Goal</h3>
+              <div id="bmi-text" style="text-align: center; width: 100%">
+                You are
+                <h1
+                  id="goal-number"
+                  style="text-align: center; width: 100%; font-weight: 300"
+                ></h1>
+                <span id="goal-text"></span>
+                your goal weight
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="account" style="display: none">
+        <div class="heading">
+          <h1 style="margin-bottom: 0px">Account</h1>
+          <div class="card metrics-card" style="height: 23rem; width: 90%">
+            <h2>Account Details</h2>
+            <div id="view-account">
+              <div class="account-row">
+                <label for="email" style="font-weight: 500">Email:</label>
+                <span id="email"></span>
+              </div>
+              <div class="account-row">
+                <label for="username" style="font-weight: 500">Username:</label>
+                <span id="username"></span>
+              </div>
+              <div class="account-row">
+                <label for="password" style="font-weight: 500">Password:</label>
+                <span id="password">●●●●●●●●</span>
+              </div>
+              <div style="font-size: small; color: red; margin-top: 10px">
+                Attention. Editing account details will log you out.
+              </div>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                  width: 40%;
+                "
+              >
+                <button
+                  id="edit-account-button"
+                  class="btn btn-primary"
+                  style="margin-top: 20px; justify-content: space-evenly"
+                >
+                  <i class="bi bi-pencil-fill"></i>
+                  Edit
+                </button>
 
-  </div>
-  <script src="js/dashboard.js"></script>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmDelete"
+                  style="margin-top: 10px"
+                >
+                  <i class="bi bi-trash-fill"></i>
+                  Delete Account
+                </button>
 
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="confirmDelete"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Are you sure you want to delete your account?
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        Your data will be deleted from the server. You can't
+                        undo this action.
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-bs-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <button
+                          id="confirm-account-delete"
+                          type="button"
+                          class="btn btn-danger"
+                        >
+                          Confirm Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="edit-account" style="display: none">
+              <div class="account-row">
+                <label for="email" style="font-weight: 500">Email:</label>
+                <span id="email-input"></span>
+              </div>
+              <div class="account-row">
+                <label for="username" style="font-weight: 500">Username:</label>
+                <input
+                  id="username-input"
+                  class="account-input-text"
+                  type="text"
+                />
+              </div>
+              <div class="account-row">
+                <label for="password" style="font-weight: 500">Password:</label>
+                <input
+                  id="password-input"
+                  class="account-input-text"
+                  type="password"
+                />
+              </div>
+              <div style="font-size: small; color: red; margin-top: 10px">
+                Attention. Editing account details will log you out.
+              </div>
+              <button
+                id="save-account-button"
+                class="btn btn-primary"
+                style="margin-top: 20px; justify-content: space-evenly"
+              >
+                <i class="bi bi-pencil-fill"></i>
+                Save
+              </button>
+              <div
+                id="account-alert-danger"
+                class="alert alert-danger"
+                role="alert"
+                style="
+                  display: none;
+                  padding: 5px;
+                  margin-top: 10px;
+                  text-align: center;
+                  font-size: small;
+                "
+              ></div>
+              <div
+                id="account-alert-success"
+                class="alert alert-success"
+                role="alert"
+                style="
+                  display: none;
+                  padding: 5px;
+                  margin-top: 10px;
+                  text-align: center;
+                  font-size: small;
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="about" style="display: none">
+        <div class="heading">
+          <h1 style="margin-bottom: 0px">About</h1>
+        </div>
+      </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+    <script src="js/home.js"></script>
+    <script src="js/body-metrics.js"></script>
+    <script src="js/account.js"></script>
+  </body>
 </html>
-

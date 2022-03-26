@@ -36,8 +36,8 @@ async function createServer() {
     app.post(
       "/auth/local",
       passport.authenticate("local", {
-        successRedirect: "/dashboard",
-        failureRedirect: "/",
+        successRedirect: "/user",
+        failureRedirect: "/user",
       })
     );
 
@@ -121,13 +121,10 @@ async function createServer() {
       res.sendFile(__dirname + '/view/dashboard.html')
     }); 
 
-    app.get("/add-workout-program", auth.checkAuthenticated, async (req, res) => {
-      res.sendFile(__dirname + '/view/add-workout-program.html')
+    app.get("/workoutProgram/workoutProgramID", auth.checkAuthenticated, async (req, res) => {
+      res.sendFile(__dirname + '/view/workout-program.html')
     });
 
-    app.get("/edit-profile", auth.checkAuthenticated, async (req, res) => {
-      res.sendFile(__dirname + '/view/edit-profile.html')
-    });
 
     // start the server
     server = app.listen(port, () => {
