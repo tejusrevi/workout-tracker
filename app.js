@@ -121,7 +121,7 @@ async function createServer() {
       res.sendFile(__dirname + '/view/dashboard.html')
     }); 
 
-    app.get("/workoutProgram/workoutProgramID", auth.checkAuthenticated, async (req, res) => {
+    app.get("/workout-program/:workoutProgramID", auth.checkAuthenticated, async (req, res) => {
       res.sendFile(__dirname + '/view/workout-program.html')
     });
 

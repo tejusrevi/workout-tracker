@@ -217,3 +217,11 @@ body {
   border-radius: 5px;
   padding: 5px;
 }
+
+#workout-program-main-container{
+  border-radius: 14px;
+}
+
+.set-rep{
+  margin: 20px;
+}

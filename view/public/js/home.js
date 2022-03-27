@@ -14,7 +14,7 @@ function getWorkoutProgramsByUser(){
               <p class="card-text program-link" style="font-size: small; opacity: 0.9;">${
                 element.isPublic ? "Public" : "Private"
               }</p>\
-              <a href="/workoutProgram/${element._id}" class="btn btn-primary">View</a>\
+              <a href="/workout-program/${element._id}" target="_blank" class="btn btn-primary">View</a>\
             </div>\
           </div>`
         );
@@ -53,7 +53,7 @@ $(document).ready(function () {
             <div style="height: 150px; background-image: linear-gradient(135deg, #72a9df, #021E80)"></div>\
             <div class="card-body">\
               <h5 class="card-title program-name">${element.nameOfProgram}</h5>\
-              <a href="#" class="btn btn-primary program-link">Go somewhere</a>\
+              <a href="/workout-program/${element._id}" target="_blank" class="btn btn-primary">View</a>\
             </div>\
           </div>`
         );
