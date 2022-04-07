@@ -237,5 +237,39 @@
       </div>
     </div>
     <script src="/js/workout-program.js"></script>
+
+    <div
+            class="modal fade"
+            id="exerciseInfoModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 id="exercise-name"></h2>
+                </div>
+                <div class="modal-body">
+                  <img id="exercise-image" />
+                  <div style="margin: auto">
+                    <div class="exercise-info">
+                      <span> <strong>Body Part:</strong></span>
+                      <span id="body-part"></span>
+                    </div>
+                    <div class="exercise-info">
+                      <span><strong>Equipment:</strong></span>
+                      <span id="equipment"></span>
+                    </div>
+                    <div class="exercise-info">
+                      <span><strong>Target Muscle:</strong></span>
+                      <span id="target-muscle"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
   </body>
 </html>

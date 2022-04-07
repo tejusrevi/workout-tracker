@@ -84,8 +84,10 @@
             </button>
           </li>
         </ul>
-        <hr />
-        <button id="logout" class="btn btn-secondary">Logout</button>
+        <div style="position:fixed ; top: 90vh; min-width: 200px">
+          <hr />
+          <button id="logout" class="btn btn-secondary" style="width: 200px;">Logout</button>
+        </div>
       </div>
       <div id="render-area">
         <div id="home" style="display: inline">
@@ -93,6 +95,7 @@
             <div class="input-group rounded">
               <input
                 type="search"
+                id="search-bar"
                 class="form-control rounded"
                 placeholder="Browse our catalogue of 1300+ workouts"
                 aria-label="Search"
@@ -103,20 +106,54 @@
                   border-radius: 12px !important;
                 "
               />
-              <span
-                class="input-group-text border-0"
-                id="search-addon"
-                style="
-                  padding: 10px;
-                  margin-left: 10px;
-                  border-radius: 10px;
-                  width: 44px;
-                  display: flex;
-                  justify-content: center;
-                "
-              >
-                <i class="bi bi-search"></i>
-              </span>
+            </div>
+          </div>
+          <div
+            id="search-bar-suggestion-container"
+            style="
+              display: flex;
+              flex-direction: column;
+              position: absolute;
+              background-color: white;
+              min-width: 75vw;
+              z-index: 1;
+              max-height: 100%;
+              overflow-y: scroll;
+              box-shadow: 2px 2px 5px grey;
+              border-bottom-right-radius: 14px;
+              border-bottom-left-radius: 14px;
+            "
+          ></div>
+          <div
+            class="modal fade"
+            id="exerciseInfoModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 id="exercise-name"></h2>
+                </div>
+                <div class="modal-body">
+                  <img id="exercise-image" />
+                  <div style="margin: auto">
+                    <div class="exercise-info">
+                      <span> <strong>Body Part:</strong></span>
+                      <span id="body-part"></span>
+                    </div>
+                    <div class="exercise-info">
+                      <span><strong>Equipment:</strong></span>
+                      <span id="equipment"></span>
+                    </div>
+                    <div class="exercise-info">
+                      <span><strong>Target Muscle:</strong></span>
+                      <span id="target-muscle"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div style="margin: 30px">
@@ -167,13 +204,20 @@
                       <div class="modal-body">
                         <div class="new-program-row">
                           <label for="name-of-program">Name of Program: </label>
-                          <input id="name-of-program-input" class="new-program-input"/>
+                          <input
+                            id="name-of-program-input"
+                            class="new-program-input"
+                          />
                         </div>
                         <div class="new-program-row">
                           <label for="is-public">Is Public: </label>
-                          <input id="is-public-input" class="new-program-input" type="checkbox" value="1">
+                          <input
+                            id="is-public-input"
+                            class="new-program-input"
+                            type="checkbox"
+                            value="1"
+                          />
                         </div>
-                        
                       </div>
                       <div class="modal-footer">
                         <button
@@ -183,7 +227,11 @@
                         >
                           Close
                         </button>
-                        <button id="add-new-program" type="button" class="btn btn-primary">
+                        <button
+                          id="add-new-program"
+                          type="button"
+                          class="btn btn-primary"
+                        >
                           Create New Program
                         </button>
                       </div>
@@ -505,6 +553,28 @@
         <div class="heading">
           <h1 style="margin-bottom: 0px">About</h1>
         </div>
+        <p style="text-align: center">
+          Workout Tracker has exercises for all your body parts, as well as
+          workout programs. All the exercises are fully described both textually
+          and visually so that you can perform them with the perfect form. The
+          requirements and equipment needed for every exercise are also listed.
+          <br /><br />
+          You can now also add exercises of your choice with your reps and sets
+          to your own workout program.
+          <br /><br />
+          Want to help others? Make your workout program public, so others can
+          also inspire and use your choices of exercises!
+          <br /><br />
+          Tired of searching for exercises? View the public workout programs
+          available and take inspiration from them!
+          <br /><br />
+          Add and update your fitness related details and goals and we will
+          remind you of them.
+          <br /><br />
+          Let's start working out! 💪
+          <br /><br /><br />
+          <span style="opacity: 0.8">Version 1.0 (04-22)</span>
+        </p>
       </div>
     </div>
     <script src="js/dashboard.js"></script>

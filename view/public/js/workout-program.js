@@ -6,6 +6,27 @@ function handleSuggestionSelect(objButton) {
   selectedID = objButton.value;
 }
 
+function handleExerciseClick(objButton){
+  $.ajax({
+    url: "/exercise/" + objButton.value,
+    type: "GET",
+    contentType: "application/json",
+    success: function (response) {
+      $('#exercise-name').text(response.name);
+      $('#exercise-image').attr("src",response.gifUrl);
+      $('#body-part').text(response.bodyPart);
+      $('#equipment').text(response.equipment);
+      $('#target-muscle').text(response.target);
+
+      $('#exerciseInfoModal').modal('toggle')
+    },
+    error: function (xhr, status, error) {
+      var errorMessage = xhr.status + ": " + xhr.statusText;
+      alert("Error - " + errorMessage);
+    },
+  });
+}
+
 function handleDelete(objButton) {
   $("#suggestion-container").empty();
   let programID =
@@ -60,7 +81,7 @@ function updateTable() {
           `
           <tr>
           <td>
-            <button type="button" class="btn btn-link">
+            <button type="button" class="btn btn-link" value=${element.exercise.id} onclick="handleExerciseClick(this)">
               ${element.exercise.name}
             </button>
           </td>
