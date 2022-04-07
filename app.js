@@ -25,6 +25,7 @@ const auth = require("./utils/auth.js");
 const userController = require("./controller/userController.js");
 const exerciseController = require("./controller/exerciseController.js");
 const workoutProgramController = require("./controller/workoutProgramController.js");
+const workoutProgram = require("./model/workoutProgram").WorkoutProgram;
 
 app.use(express.static(__dirname + "/view/public"));
 
@@ -121,9 +122,13 @@ async function createServer() {
       res.sendFile(__dirname + '/view/dashboard.html')
     }); 
 
-    app.get("/workout-program/:workoutProgramID", auth.checkAuthenticated, async (req, res) => {
-      res.sendFile(__dirname + '/view/workout-program.html')
-    });
+    app.get("/workout-program/:workoutProgramID", async (req, res) =>{
+      if (await workoutProgramController.displayEditablePage(req, res)){
+        res.sendFile(__dirname + '/view/workout-program.html')
+      }else{
+        res.sendFile(__dirname + '/view/public-workout-program.html')
+      }
+    }); 
 
 
     // start the server

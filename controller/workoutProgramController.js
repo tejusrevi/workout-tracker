@@ -265,3 +265,20 @@ module.exports.removeExerciseFromWorkoutProgram = async (req, res) => {
   }
   res.send(msg);
 };
+
+/**
+ * Function to determine if the user has permission to view editable version of workout-program page
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+module.exports.displayEditablePage = async (req, res) => {
+  let workoutProgramID = req.params.workoutProgramID;
+  let workoutObj = await WorkoutProgram.getWorkoutProgramByID(workoutProgramID);
+
+  if (req.user && workoutObj.createdBy == req.user.user._id) {
+    return true;
+  } else {
+    return false;
+  }
+};

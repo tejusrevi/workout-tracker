@@ -1,3 +1,7 @@
+/**
+ * Listener for when login-register-toggle-button is clicked
+ * Replaces contents in login form with register form
+ */
 $("#login-register-toggle-button").click(function (event) {
   event.preventDefault();
   $("#register-form").show();
@@ -7,6 +11,10 @@ $("#login-register-toggle-button").click(function (event) {
   $("#alert-success").hide();
 });
 
+/**
+ * Listener for when register-login-toggle-button is clicked
+ * Replaces contents in register form with login form
+ */
 $("#register-login-toggle-button").click(function (event) {
   event.preventDefault();
   $("#register-form").hide();
@@ -16,6 +24,13 @@ $("#register-login-toggle-button").click(function (event) {
   $("#alert-success").hide();
 });
 
+/**
+ * Listener for when submit-login button is clicked
+ * Creates a GET request to /logout to first log out any authenticated user
+ * Then creates a POST request to /auth/local to authenticate the current user
+ * 
+ * Performs basic error checking to ensure   user email and password fields are not empty
+ */
 $("#submit-login").click(function (event) {
   event.preventDefault();
 
@@ -59,6 +74,13 @@ $("#submit-login").click(function (event) {
   }
 });
 
+/**
+ * Listener for when submit-register button is clicked
+ * Creates a GET request to /logout to first log out any authenticated user
+ * Then creates a POST request to POST to add the user to database.
+ * 
+ * Performs basic error checking to user email and password fields are not empty
+ */
 $("#submit-register").click(function (event) {
   event.preventDefault();
   // logout user, if already logged in

@@ -1,15 +1,26 @@
 let exercises;
-let selectedExercise;
+let selectedID;
 
-function f1(objButton){  
+function handleSuggestionSelect(objButton) {
   $("#suggestion-container").empty();
+  selectedID = objButton.value;
+}
+
+function handleDelete(objButton) {
+  $("#suggestion-container").empty();
+  let programID =
+    window.location.pathname.split("/")[window.location.pathname.split.length];
   $.ajax({
-    url: "/exercise/" + objButton.value,
-    type: "GET",
+    url:
+      "/workoutProgram/removeExercise/" +
+      programID +
+      "?exerciseID=" +
+      objButton.value,
+    type: "PUT",
     contentType: "application/json",
     success: function (response) {
-      $("#add-exercise-search").val(response.name)
-      selectedExercise = response;
+      console.log(response);
+      updateTable();
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -22,12 +33,58 @@ function updateSuggestions(list) {
   $("#suggestion-container").empty();
   list.forEach((element) => {
     $("#suggestion-container").append(`
-    <button type="button" class="btn btn-link exercise-suggestion" value="${element.id}" onclick="f1(this)">${element.name}</button>
+    <button type="button" class="btn btn-link exercise-suggestion" value="${element.id}" onclick="handleSuggestionSelect(this)">${element.name}</button>
     `);
   });
 }
 
+function updateWorkoutProgramInfo(response) {
+  $("#name-of-program").text(response.nameOfProgram);
+  $("#name-side-panel").text(response.nameOfProgram);
+  $("#is-public-side-panel").text(response.isPublic ? "Public" : "Private");
+}
+
+function updateTable() {
+  $("#exercise-table-body").empty();
+  let programID =
+    window.location.pathname.split("/")[window.location.pathname.split.length];
+  $.ajax({
+    url: "/workoutProgram/" + programID,
+    type: "GET",
+    contentType: "application/json",
+    success: function (response) {
+      updateWorkoutProgramInfo(response);
+      response.exercises.forEach((element) => {
+        console.log(element);
+        $("#exercise-table-body").append(
+          `
+          <tr>
+          <td>
+            <button type="button" class="btn btn-link">
+              ${element.exercise.name}
+            </button>
+          </td>
+          <td>${element.numSets}</td>
+          <td>${element.numReps}</td>
+          <td>
+            <button type="button" class="btn btn-danger" value="${element.exercise.id}" onclick="handleDelete(this)">
+              <i class="bi bi-trash-fill"></i>Delete
+            </button>
+          </td>
+        </tr>
+          `
+        );
+      });
+    },
+    error: function (xhr, status, error) {
+      var errorMessage = xhr.status + ": " + xhr.statusText;
+      alert("Error - " + errorMessage);
+    },
+  });
+}
+
 $(document).ready(function () {
+  updateTable();
   $.ajax({
     url: "/exercise",
     type: "GET",
@@ -49,17 +106,91 @@ $("#add-exercise-search").on("keyup", function () {
       return element.name.includes(value);
     });
     updateSuggestions(filteredList);
-    console.log(filteredList);
-  }else{
+  } else {
     $("#suggestion-container").empty();
   }
 });
 
 $("#add-exercise").click(function (event) {
   event.preventDefault();
-  if ($("#sets-input").val() != "" && $("#reps-input").val() != "" && selectedExercise != null){
-    console.log("worked")
-  }else{
-    console.log("error")
+  if (
+    $("#sets-input").val() != "" &&
+    $("#reps-input").val() != "" &&
+    selectedID != null
+  ) {
+    let exerciseData = {};
+    exerciseData.exerciseID = selectedID;
+    exerciseData.numSets = $("#sets-input").val();
+    exerciseData.numReps = $("#reps-input").val();
+    let programID =
+      window.location.pathname.split("/")[
+        window.location.pathname.split.length
+      ];
+    $.ajax({
+      url: "/workoutProgram/addExercise/" + programID,
+      type: "PUT",
+      data: JSON.stringify(exerciseData),
+      contentType: "application/json",
+      success: function (response) {
+        updateTable();
+      },
+      error: function (xhr, status, error) {
+        var errorMessage = xhr.status + ": " + xhr.statusText;
+        alert("Error - " + errorMessage);
+      },
+    });
+  } else {
+    alert("Please fill in all details");
+  }
+});
+
+$("#add-exercise-search").on("keyup", function () {
+  var value = $(this).val().toLowerCase();
+  if (value.length > 3) {
+    let filteredList = exercises.filter((element) => {
+      return element.name.includes(value);
+    });
+    updateSuggestions(filteredList);
+  } else {
+    $("#suggestion-container").empty();
+  }
+});
+
+$("#edit-program-info").click(function (event) {
+  event.preventDefault();
+  $("#view-side-panel").hide();
+  $("#edit-side-panel").show();
+});
+
+$("#save-program-info").click(function (event) {
+  event.preventDefault();
+  let workoutProgram = {};
+  if ($("#name-side-panel-input").val() != "") {
+    workoutProgram.nameOfProgram = $("#name-side-panel-input").val();
+    if ($("#is-public-side-panel-input").prop("checked")) {
+      workoutProgram.isPublic = 1;
+    } else {
+      workoutProgram.isPublic = 0;
+    }
+    let programID =
+    window.location.pathname.split("/")[window.location.pathname.split.length];
+    $.ajax({
+      url: "/workoutProgram/" + programID,
+      type: "PUT",
+      data: JSON.stringify(workoutProgram),
+      contentType: "application/json",
+      success: function (response) {
+        console.log(response);
+        updateTable();
+
+        $("#view-side-panel").show();
+        $("#edit-side-panel").hide();
+      },
+      error: function (xhr, status, error) {
+        var errorMessage = xhr.status + ": " + xhr.statusText;
+        alert("Error - " + errorMessage);
+      },
+    });
+  } else {
   }
 });

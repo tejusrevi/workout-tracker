@@ -58,15 +58,6 @@
         >
           <h2 id="name-of-program"></h2>
           <div>
-            <button
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#addNewExercise"
-            >
-              <i class="bi bi-plus-circle-fill"></i>
-              Add New Exercise
-            </button>
-
             <div
               class="modal fade"
               id="addNewExercise"
@@ -153,13 +144,6 @@
                     >
                       Close
                     </button>
-                    <button
-                      id="add-exercise"
-                      type="button"
-                      class="btn btn-primary"
-                    >
-                      Add
-                    </button>
                   </div>
                 </div>
               </div>
@@ -173,69 +157,13 @@
                 <th scope="col">Exercise Name</th>
                 <th scope="col"># Sets</th>
                 <th scope="col"># Reps</th>
-                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody id="exercise-table-body"></tbody>
           </table>
         </div>
       </div>
-      <div
-        id="workout-program-main-container-right"
-        class="card"
-        style="
-          width: 20%;
-          margin: 30px;
-          border-radius: 14px;
-          max-height: 12rem;
-          padding: 10px;
-        "
-      >
-        <h5>Edit Program Details</h5>
-        <div>
-          <div id="view-side-panel">
-            <div>
-              <label for="name-side-panel">Name: </label>
-              <span id="name-side-panel"></span>
-            </div>
-            <div>
-              <i class="bi bi-globe"></i>
-              <span id="is-public-side-panel"></span>
-            </div>
-            <div style="margin: 10px">
-              <button id="edit-program-info" class="btn btn-primary">
-                Edit
-              </button>
-            </div>
-          </div>
-          <div id="edit-side-panel" style="display: none;">
-            <div style="display: flex; flex-direction: row; justify-content: space-between;">
-              <label for="name-side-panel-input">Name: </label>
-              <input
-                id="name-side-panel-input"
-                type="text"
-                class="form-control rounded"
-                aria-label="Search"
-                aria-describedby="search-addon"
-                style="
-                  border: none;
-                  background-color: #f8f9fa;
-                  border-radius: 12px !important;
-                  margin-left: 10px;
-                "
-              />
-            </div>
-            <div style="display: flex; flex-direction: row; justify-content: space-between;">
-              <label for="is-public-side-panel-input">Public: </label>
-              <input id="is-public-side-panel-input" class="new-program-input" type="checkbox" value="1" style="margin: 10px;">
-            </div>
-            <div style="margin: 10px">
-              <button id="save-program-info" class="btn btn-primary">Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-    <script src="/js/workout-program.js"></script>
+    <script src="/js/public-workout-program.js"></script>
   </body>
 </html>
