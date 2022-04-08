@@ -143,7 +143,11 @@ $("#submit-register").click(function (event) {
   }
 });
 
+/*
+* Listner for the sign in with Google button
+*/
 $("#google-button").click(function (event) {
   event.preventDefault();
+  //redirects user to the google sign in page
   window.location.replace("/auth/google");
 });
