@@ -122,10 +122,11 @@ $(document).ready(function () {
 
 $("#add-exercise-search").on("keyup", function () {
   var value = $(this).val().toLowerCase();
-  if (value.length > 3) {
+  if (value.length > 1) {
     let filteredList = exercises.filter((element) => {
       return element.name.includes(value);
     });
+
     updateSuggestions(filteredList);
   } else {
     $("#suggestion-container").empty();
@@ -162,18 +163,6 @@ $("#add-exercise").click(function (event) {
     });
   } else {
     alert("Please fill in all details");
-  }
-});
-
-$("#add-exercise-search").on("keyup", function () {
-  var value = $(this).val().toLowerCase();
-  if (value.length > 3) {
-    let filteredList = exercises.filter((element) => {
-      return element.name.includes(value);
-    });
-    updateSuggestions(filteredList);
-  } else {
-    $("#suggestion-container").empty();
   }
 });
 

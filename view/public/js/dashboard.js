@@ -1,5 +1,6 @@
 let exercises;
 
+
 $(document).ready(function () {
   $.ajax({
     url: "/exercise",
@@ -34,7 +35,6 @@ function updateModal(exerciseID){
   });
 }
 function handleSuggestionSelect(objButton) {
-  $("#suggestion-container").empty();
   $('#exerciseInfoModal').modal('toggle')
   updateModal(objButton.value)
 }
@@ -50,7 +50,7 @@ function updateSuggestions(list) {
 
 $("#search-bar").on("keyup", function () {
   var value = $(this).val().toLowerCase();
-  if (value.length > 3) {
+  if (value.length > 2) {
     let filteredList = exercises.filter((element) => {
       return element.name.includes(value);
     });

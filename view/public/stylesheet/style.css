@@ -233,6 +233,12 @@ body {
   margin: auto;
 }
 
+.credits-link{
+  color: #505050;
+  font-size: smaller;
+  
+}
+
 
 ::-webkit-scrollbar {
   width: 10px;
