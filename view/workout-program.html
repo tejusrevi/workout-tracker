@@ -96,6 +96,7 @@
                         placeholder="Search exercise"
                         aria-label="Search"
                         aria-describedby="search-addon"
+                        autocomplete="off"
                         style="
                           border: none;
                           background-color: #f8f9fa;
@@ -210,8 +211,14 @@
               </button>
             </div>
           </div>
-          <div id="edit-side-panel" style="display: none;">
-            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+          <div id="edit-side-panel" style="display: none">
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+              "
+            >
               <label for="name-side-panel-input">Name: </label>
               <input
                 id="name-side-panel-input"
@@ -227,12 +234,26 @@
                 "
               />
             </div>
-            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+              "
+            >
               <label for="is-public-side-panel-input">Public: </label>
-              <input id="is-public-side-panel-input" class="new-program-input" type="checkbox" value="1" style="margin: 10px;">
+              <input
+                id="is-public-side-panel-input"
+                class="new-program-input"
+                type="checkbox"
+                value="1"
+                style="margin: 10px"
+              />
             </div>
             <div style="margin: 10px">
-              <button id="save-program-info" class="btn btn-primary">Save</button>
+              <button id="save-program-info" class="btn btn-primary">
+                Save
+              </button>
             </div>
           </div>
         </div>
@@ -241,37 +262,36 @@
     <script src="/js/workout-program.js"></script>
 
     <div
-            class="modal fade"
-            id="exerciseInfoModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h2 id="exercise-name"></h2>
-                </div>
-                <div class="modal-body">
-                  <img id="exercise-image" />
-                  <div style="margin: auto">
-                    <div class="exercise-info">
-                      <span> <strong>Body Part:</strong></span>
-                      <span id="body-part"></span>
-                    </div>
-                    <div class="exercise-info">
-                      <span><strong>Equipment:</strong></span>
-                      <span id="equipment"></span>
-                    </div>
-                    <div class="exercise-info">
-                      <span><strong>Target Muscle:</strong></span>
-                      <span id="target-muscle"></span>
-                    </div>
-                  </div>
-                </div>
+      class="modal fade"
+      id="exerciseInfoModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="exercise-name"></h2>
+          </div>
+          <div class="modal-body">
+            <img id="exercise-image" />
+            <div style="margin: auto">
+              <div class="exercise-info">
+                <span> <strong>Body Part:</strong></span>
+                <span id="body-part"></span>
+              </div>
+              <div class="exercise-info">
+                <span><strong>Equipment:</strong></span>
+                <span id="equipment"></span>
+              </div>
+              <div class="exercise-info">
+                <span><strong>Target Muscle:</strong></span>
+                <span id="target-muscle"></span>
               </div>
             </div>
           </div>
-
+        </div>
+      </div>
+    </div>
   </body>
 </html>

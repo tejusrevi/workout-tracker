@@ -93,7 +93,10 @@
       </div>
       <div id="render-area">
         <div id="home" style="display: inline">
-          <div id="search-bar-container">
+          <div
+            id="search-bar-container"
+            style="display: flex; flex-direction: row"
+          >
             <div class="input-group rounded">
               <input
                 type="search"
@@ -102,13 +105,44 @@
                 placeholder="Browse our catalogue of 1300+ workouts"
                 aria-label="Search"
                 aria-describedby="search-addon"
+                autocomplete="off"
                 style="
                   border: none;
                   background-color: #f8f9fa;
                   border-radius: 12px !important;
+                  min-width: 70vw;
                 "
               />
             </div>
+          </div>
+          <div id="filters" style="display: flex !important; flex-direction: row; justify-content: space-evenly; padding: 10px 0px; display: none;">
+            <div>
+              Filter By: 
+            </div>
+            <div class="filter-container">
+              Body Part: 
+              <select id="body-part-select" class="filter" aria-label="Default select example">
+                <option value="none" selected>Select</option>
+              </select>
+            </div>
+
+            <div class="filter-container">
+              Target Muscle: 
+              <select id="target-muscle-select" class="filter" aria-label="Default select example">
+                <option value="none" selected>Select</option>
+              </select>
+            </div>
+
+            <div class="filter-container">
+              Equipment: 
+              <select id="equipment-select" class="filter" aria-label="Default select example">
+                <option value="none" selected>Select</option>
+              </select>
+            </div>
+
+            <button id="close-suggestions" class="btn btn-secondary">
+              Close Suggestions
+            </button>
           </div>
           <div
             id="search-bar-suggestion-container"
@@ -209,6 +243,7 @@
                           <input
                             id="name-of-program-input"
                             class="new-program-input"
+                            autocomplete="off"
                           />
                         </div>
                         <div class="new-program-row">
@@ -575,13 +610,21 @@
           <br /><br />
           Let's start working out! 💪
           <br /><br /><br />
-          <span style="opacity: 0.8">Version 1.0 (04-22)</span>
+          <span style="opacity: 0.5; font-size: smaller; font-weight: 600"
+            >VERSION 1.0</span
+          >
           <br /><br /><br />
           <span
-            ><a class="credits-link" href="https://icons.getbootstrap.com/"
+            ><a
+              class="credits-link"
+              href="https://icons.getbootstrap.com/"
+              target="_blank"
               >Icons from BootStrap Icons</a
             >
-            | <a class="credits-link" href="https://undraw.co/">Images from UnDraw</a></span
+            |
+            <a class="credits-link" href="https://undraw.co/" target="_blank"
+              >Images from UnDraw</a
+            ></span
           >
         </p>
       </div>

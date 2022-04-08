@@ -57,98 +57,6 @@
           "
         >
           <h2 id="name-of-program"></h2>
-          <div>
-            <div
-              class="modal fade"
-              id="addNewExercise"
-              tabindex="-1"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                      Add New Exercise
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <div>
-                      <input
-                        id="add-exercise-search"
-                        type="search"
-                        class="form-control rounded"
-                        placeholder="Search exercise"
-                        aria-label="Search"
-                        aria-describedby="search-addon"
-                        style="
-                          border: none;
-                          background-color: #f8f9fa;
-                          border-radius: 12px !important;
-                        "
-                      />
-                      <div
-                        id="suggestion-container"
-                        style="display: flex; flex-direction: column"
-                      ></div>
-                      <div
-                        style="
-                          display: flex;
-                          flex-direction: row;
-                          justify-content: center;
-                        "
-                      >
-                        <input
-                          id="sets-input"
-                          type="number"
-                          min="0"
-                          class="form-control rounded"
-                          aria-label="Search"
-                          placeholder="Sets"
-                          style="
-                            border: none;
-                            background-color: #f8f9fa;
-                            border-radius: 8px !important;
-                            margin: 20px;
-                          "
-                        />
-                        <span style="margin: 20px">X</span>
-                        <input
-                          id="reps-input"
-                          type="number"
-                          min="0"
-                          class="form-control rounded"
-                          aria-label="Search"
-                          placeholder="Reps"
-                          style="
-                            border: none;
-                            background-color: #f8f9fa;
-                            border-radius: 8px !important;
-                            margin: 20px;
-                          "
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
         <div>
           <table class="table" style="margin-top: 10px">
@@ -161,6 +69,38 @@
             </thead>
             <tbody id="exercise-table-body"></tbody>
           </table>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="exerciseInfoModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="exercise-name"></h2>
+          </div>
+          <div class="modal-body">
+            <img id="exercise-image" />
+            <div style="margin: auto">
+              <div class="exercise-info">
+                <span> <strong>Body Part:</strong></span>
+                <span id="body-part"></span>
+              </div>
+              <div class="exercise-info">
+                <span><strong>Equipment:</strong></span>
+                <span id="equipment"></span>
+              </div>
+              <div class="exercise-info">
+                <span><strong>Target Muscle:</strong></span>
+                <span id="target-muscle"></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

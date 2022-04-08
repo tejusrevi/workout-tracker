@@ -38,7 +38,7 @@ async function createServer() {
       "/auth/local",
       passport.authenticate("local", {
         successRedirect: "/user",
-        failureRedirect: "/user",
+        failureRedirect: "/",
       })
     );
 

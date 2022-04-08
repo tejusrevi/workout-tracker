@@ -1,5 +1,13 @@
-let exercises;
+var exercises = [];
 
+var searchBarInput = "";
+var bodyPartInput = "none";
+var equipmentInput = "none";
+var targetMuscleInput = "none";
+
+var listOfBodyParts = [];
+var listOfTargetMuscles = [];
+var listOfEquipments = [];
 
 $(document).ready(function () {
   $.ajax({
@@ -8,6 +16,40 @@ $(document).ready(function () {
     contentType: "application/json",
     success: function (response) {
       exercises = response;
+
+      exercises.forEach((exercise) => {
+        if (!listOfBodyParts.includes(exercise.bodyPart)) {
+          listOfBodyParts.push(exercise.bodyPart);
+        }
+        if (!listOfTargetMuscles.includes(exercise.target)) {
+          listOfTargetMuscles.push(exercise.target);
+        }
+        if (!listOfEquipments.includes(exercise.equipment)) {
+          listOfEquipments.push(exercise.equipment);
+        }
+      });
+
+      listOfBodyParts.forEach((bodyPart) => {
+        $("#body-part-select").append(
+          `
+          <option value="${bodyPart}">${bodyPart}</option>
+          `
+        );
+      });
+      listOfEquipments.forEach((equipment) => {
+        $("#equipment-select").append(
+          `
+          <option value="${equipment}">${equipment}</option>
+          `
+        );
+      });
+      listOfTargetMuscles.forEach((targetMuscle) => {
+        $("#target-muscle-select").append(
+          `
+          <option value="${targetMuscle}">${targetMuscle}</option>
+          `
+        );
+      });
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -16,17 +58,17 @@ $(document).ready(function () {
   });
 });
 
-function updateModal(exerciseID){
+function updateModal(exerciseID) {
   $.ajax({
     url: "/exercise/" + exerciseID,
     type: "GET",
     contentType: "application/json",
     success: function (response) {
-      $('#exercise-name').text(response.name);
-      $('#exercise-image').attr("src",response.gifUrl);
-      $('#body-part').text(response.bodyPart);
-      $('#equipment').text(response.equipment);
-      $('#target-muscle').text(response.target);
+      $("#exercise-name").text(response.name);
+      $("#exercise-image").attr("src", response.gifUrl);
+      $("#body-part").text(response.bodyPart);
+      $("#equipment").text(response.equipment);
+      $("#target-muscle").text(response.target);
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -35,8 +77,8 @@ function updateModal(exerciseID){
   });
 }
 function handleSuggestionSelect(objButton) {
-  $('#exerciseInfoModal').modal('toggle')
-  updateModal(objButton.value)
+  $("#exerciseInfoModal").modal("toggle");
+  updateModal(objButton.value);
 }
 
 function updateSuggestions(list) {
@@ -48,15 +90,24 @@ function updateSuggestions(list) {
   });
 }
 
+$(".filter").on("change", function () {
+  if (this.id == "body-part-select") {
+    bodyPartInput = this.value;
+  } else if (this.id == "equipment-select") {
+    equipmentInput = this.value;
+  } else if (this.id == "target-muscle-select") {
+    targetMuscleInput = this.value;
+  }
+  filterExercises()
+});
+
 $("#search-bar").on("keyup", function () {
-  var value = $(this).val().toLowerCase();
-  if (value.length > 2) {
-    let filteredList = exercises.filter((element) => {
-      return element.name.includes(value);
-    });
-    updateSuggestions(filteredList);
+  $("#filters").show();
+  searchBarInput = $(this).val().toLowerCase();
+  if (searchBarInput.length > 1) {
+    filterExercises();
   } else {
-    $("#search-bar-suggestion-container").empty();//TODO
+    $("#search-bar-suggestion-container").empty();
   }
 });
 
@@ -104,7 +155,10 @@ $("#about-nav").click(function (event) {
   $("#about-nav").addClass("active");
 });
 
-
+$("#close-suggestions").click(function (event) {
+  $("#search-bar-suggestion-container").empty();
+  $("#filters").hide();
+});
 
 $("#logout").click(function (event) {
   $.ajax({
@@ -120,3 +174,25 @@ $("#logout").click(function (event) {
     },
   });
 });
+
+function filterExercises() {
+  let filteredList = exercises.filter((element) => {
+    let nameMatch = element.name.includes(searchBarInput);
+
+    let bodyPartMatch = true;
+    let equipmentMatch = true;
+    let targetMuscleMatch = true;
+
+    if (bodyPartInput != 'none'){
+      bodyPartMatch = bodyPartInput == element.bodyPart;
+    }
+    if (equipmentInput != 'none'){
+      equipmentMatch = equipmentInput == element.equipment;
+    }
+    if (targetMuscleInput != 'none'){
+      targetMuscleMatch = targetMuscleInput == element.target;
+    }
+    return nameMatch && bodyPartMatch && equipmentMatch && targetMuscleMatch;
+  });
+  updateSuggestions(filteredList);
+}

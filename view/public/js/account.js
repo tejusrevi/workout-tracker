@@ -39,12 +39,6 @@ $("#edit-account-button").click(function (event) {
     contentType: "application/json",
     success: function (response) {
       $("#username-input").val(response.username);
-
-      updateBMI(response.personalInfo.height, response.personalInfo.weight);
-      updateGoal(
-        response.personalInfo.weight,
-        response.personalInfo.goalWeight
-      );
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
