@@ -9,14 +9,18 @@ var listOfBodyParts = [];
 var listOfTargetMuscles = [];
 var listOfEquipments = [];
 
+/*
+* Execute when DOM is fully loaded
+*/
 $(document).ready(function () {
   $.ajax({
+    //a GET request to get all the exercises from the exercise collection
     url: "/exercise",
     type: "GET",
     contentType: "application/json",
     success: function (response) {
       exercises = response;
-
+      //get all the possible types of body part, target muscles and equipment available
       exercises.forEach((exercise) => {
         if (!listOfBodyParts.includes(exercise.bodyPart)) {
           listOfBodyParts.push(exercise.bodyPart);
@@ -28,27 +32,15 @@ $(document).ready(function () {
           listOfEquipments.push(exercise.equipment);
         }
       });
-
+      //add them as options to the respective select boxes
       listOfBodyParts.forEach((bodyPart) => {
-        $("#body-part-select").append(
-          `
-          <option value="${bodyPart}">${bodyPart}</option>
-          `
-        );
+        $("#body-part-select").append(`<option value="${bodyPart}">${bodyPart}</option>`);
       });
       listOfEquipments.forEach((equipment) => {
-        $("#equipment-select").append(
-          `
-          <option value="${equipment}">${equipment}</option>
-          `
-        );
+        $("#equipment-select").append(`<option value="${equipment}">${equipment}</option>`);
       });
       listOfTargetMuscles.forEach((targetMuscle) => {
-        $("#target-muscle-select").append(
-          `
-          <option value="${targetMuscle}">${targetMuscle}</option>
-          `
-        );
+        $("#target-muscle-select").append(`<option value="${targetMuscle}">${targetMuscle}</option>`);
       });
     },
     error: function (xhr, status, error) {
@@ -57,13 +49,18 @@ $(document).ready(function () {
     },
   });
 });
-
+/*
+* This function updates the modal for the selected exercise
+* @param {int} exerciseID, id of the exercise
+*/
 function updateModal(exerciseID) {
+  //make a GET request to get details of the selected exercise
   $.ajax({
     url: "/exercise/" + exerciseID,
     type: "GET",
     contentType: "application/json",
     success: function (response) {
+    //update the modal accordingly
       $("#exercise-name").text(response.name);
       $("#exercise-image").attr("src", response.gifUrl);
       $("#body-part").text(response.bodyPart);
@@ -76,13 +73,25 @@ function updateModal(exerciseID) {
     },
   });
 }
+
+/*
+* This function handles when an exercise is selected from the suggestion box
+* @param {HTML button} objButton, the exercise name buttonw which was clicked
+*/
 function handleSuggestionSelect(objButton) {
   $("#exerciseInfoModal").modal("toggle");
+  //update the modal based on the exercise wbutton hich was selected
+  //recall that the button value = exerciseId.
   updateModal(objButton.value);
 }
 
+/*
+* This function adds the suggested exercises to the suggestion box
+* @param {[Exercise]} list, an array that contains all exercises that match the users selection
+*/
 function updateSuggestions(list) {
   $("#search-bar-suggestion-container").empty();
+  //every exercise is added to the suggestion container as a button whose value represents the id of its respective exercise
   list.forEach((element) => {
     $("#search-bar-suggestion-container").append(`
     <button type="button" class="btn btn-link exercise-suggestion" value="${element.id}" onclick="handleSuggestionSelect(this)">${element.name}</button>
@@ -90,6 +99,9 @@ function updateSuggestions(list) {
   });
 }
 
+/*
+* Event handler when the selected options on the filtered exercise search change
+*/
 $(".filter").on("change", function () {
   if (this.id == "body-part-select") {
     bodyPartInput = this.value;
@@ -98,6 +110,7 @@ $(".filter").on("change", function () {
   } else if (this.id == "target-muscle-select") {
     targetMuscleInput = this.value;
   }
+  //filter the exercises based on the new selections
   filterExercises()
 });
 
@@ -111,7 +124,11 @@ $("#search-bar").on("keyup", function () {
   }
 });
 
+/*
+* Click event for the "Body Metrics" button on the dashboard navigation panel
+*/
 $("#home-nav").click(function (event) {
+  //hides all other views/pages, shows only the home page/view
   event.preventDefault();
   $("#home").show();
   $("#body-metrics").hide();
@@ -122,7 +139,11 @@ $("#home-nav").click(function (event) {
   $("#home-nav").addClass("active");
 });
 
+/*
+* Click event for the "Body Metrics" button on the dashboard navigation panel
+*/
 $("#body-metrics-nav").click(function (event) {
+  //hides all other views/pages, shows the Body Metrics page/view
   event.preventDefault();
   $("#home").hide();
   $("#body-metrics").show();
@@ -133,7 +154,11 @@ $("#body-metrics-nav").click(function (event) {
   $("#body-metrics-nav").addClass("active");
 });
 
+/*
+* Click event for the "Account" button on the dashboard navigation panel
+*/
 $("#account-nav").click(function (event) {
+  //hides all the other views/pages, shows the Account view/page
   event.preventDefault();
   $("#home").hide();
   $("#body-metrics").hide();
@@ -144,7 +169,11 @@ $("#account-nav").click(function (event) {
   $("#account-nav").addClass("active");
 });
 
+/*
+* Click event for the "About" button on the dashboard navigation panel
+*/
 $("#about-nav").click(function (event) {
+  //hides all the other view/pages, shows the About view/page
   event.preventDefault();
   $("#home").hide();
   $("#body-metrics").hide();
@@ -160,7 +189,11 @@ $("#close-suggestions").click(function (event) {
   $("#filters").hide();
 });
 
+/*
+* Click event for the "Log out" button on the dashboard navigation panel
+*/
 $("#logout").click(function (event) {
+  //makes a GET request, logs the user out  
   $.ajax({
     url: "/logout",
     type: "GET",
@@ -175,6 +208,9 @@ $("#logout").click(function (event) {
   });
 });
 
+/*
+* Filters the exercises and updates the suggestions
+*/
 function filterExercises() {
   let filteredList = exercises.filter((element) => {
     let nameMatch = element.name.includes(searchBarInput);
