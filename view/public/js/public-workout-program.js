@@ -51,10 +51,10 @@ function updateTable() {
           `
           <tr>
           <td>
-            <button type="button" class="btn btn-link" value=${element.exercise.id} onclick="handleExerciseClick(this)">
+            <button type="button" class="btn btn-link capitalize" value=${element.exercise.id} onclick="handleExerciseClick(this)">
               ${element.exercise.name}
             </button>
-          <td/>
+          </td>
           <td>${element.numSets}</td>
           <td>${element.numReps}</td>
         </tr>

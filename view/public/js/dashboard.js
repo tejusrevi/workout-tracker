@@ -34,13 +34,13 @@ $(document).ready(function () {
       });
       //add them as options to the respective select boxes
       listOfBodyParts.forEach((bodyPart) => {
-        $("#body-part-select").append(`<option value="${bodyPart}">${bodyPart}</option>`);
+        $("#body-part-select").append(`<option class="capitalize" value="${bodyPart}">${bodyPart}</option>`);
       });
       listOfEquipments.forEach((equipment) => {
-        $("#equipment-select").append(`<option value="${equipment}">${equipment}</option>`);
+        $("#equipment-select").append(`<option class="capitalize" value="${equipment}">${equipment}</option>`);
       });
       listOfTargetMuscles.forEach((targetMuscle) => {
-        $("#target-muscle-select").append(`<option value="${targetMuscle}">${targetMuscle}</option>`);
+        $("#target-muscle-select").append(`<option class="capitalize" value="${targetMuscle}">${targetMuscle}</option>`);
       });
     },
     error: function (xhr, status, error) {
@@ -94,7 +94,7 @@ function updateSuggestions(list) {
   //every exercise is added to the suggestion container as a button whose value represents the id of its respective exercise
   list.forEach((element) => {
     $("#search-bar-suggestion-container").append(`
-    <button type="button" class="btn btn-link exercise-suggestion" value="${element.id}" onclick="handleSuggestionSelect(this)">${element.name}</button>
+    <button type="button" class="btn btn-link exercise-suggestion capitalize" value="${element.id}" onclick="handleSuggestionSelect(this)">${element.name}</button>
     `);
   });
 }

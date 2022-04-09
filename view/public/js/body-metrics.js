@@ -12,7 +12,7 @@ function updateBMI(height, weight) {
   $("#bmi-number").text(bmi);
   if (bmi < 18.5) {
     $("#bmi-text").text("Your BMI classification is underweight");
-  } else if (bmi < 18.5 && bmi < 24.9) {
+  } else if (bmi > 18.5 && bmi < 24.9) {
     $("#bmi-text").text("Your BMI classification is normal weight");
   } else if (bmi > 25.0) {
     $("#bmi-text").text("Your BMI classification is overweight");

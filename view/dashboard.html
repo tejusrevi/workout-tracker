@@ -34,7 +34,10 @@
     ></script>
   </head>
   <body>
-    <div id="dashboard-container" style="min-height: 100vh">
+    <div
+      id="dashboard-container"
+      style="min-height: 100vh; display: flex; flex-direction: row"
+    >
       <div
         class="d-flex flex-column flex-shrink-0 p-3 bg-light"
         style="width: 20vw; min-height: 100%"
@@ -46,7 +49,7 @@
           <svg class="bi me-2" width="40" height="32">
             <use xlink:href="#bootstrap" />
           </svg>
-          <span class="fs-4">Workout Log</span>
+          <span class="fs-4">Workout Tracker</span>
         </a>
         <hr />
         <ul class="nav nav-pills flex-column mb-auto">
@@ -91,7 +94,7 @@
           </button>
         </div>
       </div>
-      <div id="render-area">
+      <div id="render-area" style="margin: 20px; width: 100%">
         <div id="home" style="display: inline">
           <div
             id="search-bar-container"
@@ -114,27 +117,39 @@
               />
             </div>
           </div>
-          <div id="filters" style="padding: 10px 0px; display: none;">
+          <div id="filters" style="padding: 10px 0px; display: none">
             <div>
               <strong>Filter By: </strong>
             </div>
             <div class="filter-container">
-              Body Part: 
-              <select id="body-part-select" class="filter" aria-label="Default select example">
+              Body Part:
+              <select
+                id="body-part-select"
+                class="filter"
+                aria-label="Default select example"
+              >
                 <option value="none" selected>Select</option>
               </select>
             </div>
 
             <div class="filter-container">
-              Target Muscle: 
-              <select id="target-muscle-select" class="filter" aria-label="Default select example">
+              Target Muscle:
+              <select
+                id="target-muscle-select"
+                class="filter"
+                aria-label="Default select example"
+              >
                 <option value="none" selected>Select</option>
               </select>
             </div>
 
             <div class="filter-container">
-              Equipment: 
-              <select id="equipment-select" class="filter" aria-label="Default select example">
+              Equipment:
+              <select
+                id="equipment-select"
+                class="filter"
+                aria-label="Default select example"
+              >
                 <option value="none" selected>Select</option>
               </select>
             </div>
@@ -169,20 +184,20 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h2 id="exercise-name"></h2>
+                  <h2 id="exercise-name" class="capitalize"></h2>
                 </div>
                 <div class="modal-body">
                   <img id="exercise-image" />
                   <div style="margin: auto">
-                    <div class="exercise-info">
+                    <div class="exercise-info capitalize">
                       <span> <strong>Body Part:</strong></span>
                       <span id="body-part"></span>
                     </div>
-                    <div class="exercise-info">
+                    <div class="exercise-info capitalize">
                       <span><strong>Equipment:</strong></span>
                       <span id="equipment"></span>
                     </div>
-                    <div class="exercise-info">
+                    <div class="exercise-info capitalize">
                       <span><strong>Target Muscle:</strong></span>
                       <span id="target-muscle"></span>
                     </div>
@@ -403,19 +418,37 @@
             ></div>
           </div>
           <div style="width: 50%">
-            <div class="card metrics-card" style="height: 14rem; width: 90%; display: none;">
+            <div
+              class="card metrics-card"
+              style="height: 14rem; width: 90%; display: none"
+            >
               <h3 style="margin-bottom: 10px">BMI</h3>
               <h1
                 id="bmi-number"
                 style="text-align: center; width: 100%; font-weight: 300"
+              ></h1>
+              <div id="bmi-text" style="text-align: center; width: 100%"></div>
+              <div
+                style="
+                  text-align: center;
+                  width: 100%;
+                  font-size: smaller;
+                  margin-top: 5px;
+                "
               >
-                
-              </h1>
-              <div id="bmi-text" style="text-align: center; width: 100%">
-                
+                <a
+                  style="color: grey"
+                  href="https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/healthy-weights/canadian-guidelines-body-weight-classification-adults/body-mass-index-nomogram.html"
+                  target="_blank"
+                >
+                  <i class="bi bi-info-circle"></i> See how we calculate this</a
+                >
               </div>
             </div>
-            <div class="card metrics-card" style="height: 14rem; width: 90%; display: none;">
+            <div
+              class="card metrics-card"
+              style="height: 14rem; width: 90%; display: none"
+            >
               <h3 style="margin-bottom: 10px">Goal</h3>
               <div id="bmi-text" style="text-align: center; width: 100%">
                 You are
