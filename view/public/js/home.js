@@ -37,8 +37,8 @@ function getWorkoutProgramsByUser() {
         response.forEach((element) => {
           //add every workout program accrodingly under the "Your Programs" label
           $("#programs-by-user").append(
-            `<div class="card" style="width: 15rem; overflow: hidden">\
-              <div style="height: 150px; background-image: linear-gradient(135deg, #72a9df, #021E80)"></div>\
+            `<div class="card workout-program-card" style="width: 15rem; overflow: hidden">\
+              <div class="workout-program-thumb" style="height: 150px; background-image: url(/images/thumbnail/thumb${ element._id[element._id.length - 1].charCodeAt(0) % 7 }.png); background-size:cover; background-repeat:no-repeat; background-position: center center;" ></div>\
               <div class="card-body">\
                 <h5 class="card-title program-name">${
                   element.nameOfProgram
@@ -55,6 +55,7 @@ function getWorkoutProgramsByUser() {
               </div>\
             </div>`
           );
+
         });
       }
     },
@@ -95,8 +96,8 @@ $(document).ready(function () {
       //an a-tag is implemented, so whenever View is clicked it takes the user to a new page showing the public workout program details
       response.forEach((element) => {
         $("#public-programs").append(
-          `<div class="card" style="width: 15rem;">\
-              <div style="height: 150px; background-image: linear-gradient(135deg, #72a9df, #021E80)"></div>\
+          `<div class="card workout-program-card" style="width: 15rem;">\
+          <div class="workout-program-thumb" style="height: 150px; background-image: url(/images/thumbnail/thumb${ element._id[element._id.length - 1].charCodeAt(0) % 7 }.png); background-size:cover; background-repeat:no-repeat; background-position: center center;" ></div>\
               <div class="card-body">\
                 <h5 class="card-title program-name">${element.nameOfProgram}</h5>\
                 <a href="/workout-program/${element._id}" target="_blank" class="btn btn-primary">View</a>\

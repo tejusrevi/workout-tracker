@@ -238,13 +238,45 @@ body {
   font-size: smaller;
   
 }
-
+.filter-container{
+  margin: 5px;
+}
 .filter{
   border-radius: 7px;
   padding: 7px 5px;
   margin: 0px 5px;
   border-width: 0px;
   background-color: #f8f9fa;
+}
+
+.workout-program-card{
+  animation: fadeIn 0.5s;
+  animation-delay: 1s;
+  -webkit-animation: fadeIn 0.5s;
+  -moz-animation: fadeIn 0.5s;
+  -o-animation: fadeIn 0.5s;
+  -ms-animation: fadeIn 0.5s;
+}
+
+.workout-program-card:hover {
+  transition: transform .1s;
+  transform: scale(1.01); 
+}
+
+#search-bar{
+  margin: auto;
+  animation: fadeIn 0.5s;
+  -webkit-animation: searchBarIntro 0.5s;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@keyframes searchBarIntro {
+  0% {max-width: 0%;}
+  100% {max-width: 100%;}
 }
 
 ::-webkit-scrollbar {

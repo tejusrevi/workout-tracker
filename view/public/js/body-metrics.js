@@ -1,44 +1,45 @@
 /*
-* This function calcualtes and updates the BMI  on the BMI panel on the Body Metrics page
-* @param {float} height of the user
-* @param {float} weight of the user
-*/
+ * This function calcualtes and updates the BMI  on the BMI panel on the Body Metrics page
+ * @param {float} height of the user
+ * @param {float} weight of the user
+ */
 function updateBMI(height, weight) {
   //caluclating the BMI on this reference
   // https://www.canada.ca/en/health-canada/services/food-nutrition/healthy-eating/healthy-weights/canadian-guidelines-body-weight-classification-adults/body-mass-index-nomogram.html
-  let bmi = Math.round( (weight / (height/100 * height/100)) * 100) / 100;
+  let bmi =
+    Math.round((weight / (((height / 100) * height) / 100)) * 100) / 100;
   //updates both the BMI value and the text aswell
   $("#bmi-number").text(bmi);
-  if (bmi < 18.5){
+  if (bmi < 18.5) {
     $("#bmi-text").text("Your BMI classification is underweight");
-  }else if (bmi < 18.5 && bmi < 24.9){
+  } else if (bmi < 18.5 && bmi < 24.9) {
     $("#bmi-text").text("Your BMI classification is normal weight");
-  }else if (bmi >25.0){
+  } else if (bmi > 25.0) {
     $("#bmi-text").text("Your BMI classification is overweight");
   }
 }
 
 /*
-* This function updates the weight goal for the user on the Body Metric Page
-* @param {float} weight, the weight of the user
-* @param {float} goalWeight, the goal weight of the user
-*/
+ * This function updates the weight goal for the user on the Body Metric Page
+ * @param {float} weight, the weight of the user
+ * @param {float} goalWeight, the goal weight of the user
+ */
 function updateGoal(weight, goalWeight) {
   //calculates how far behind or ahead the user is from their weight goal
   let diff = goalWeight - weight;
 
   $("#goal-number").text(Math.abs(diff) + " kgs");
 
-  if (diff < 0){
-    $("#goal-text").text('over');
-  }else {
-    $("#goal-text").text('under');
+  if (diff < 0) {
+    $("#goal-text").text("over");
+  } else {
+    $("#goal-text").text("under");
   }
 }
 
 /*
-* This function updates the secondary information/metrics for the user on the Body Metrics page
-*/
+ * This function updates the secondary information/metrics for the user on the Body Metrics page
+ */
 function updateMetrics() {
   //makes a GET request to get the currently logged in user
   $.ajax({
@@ -53,8 +54,14 @@ function updateMetrics() {
       $("#weight").text(response.personalInfo.weight);
       $("#goal-weight").text(response.personalInfo.goalWeight);
 
-      updateBMI(response.personalInfo.height, response.personalInfo.weight)
-      updateGoal(response.personalInfo.weight, response.personalInfo.goalWeight)
+      if (response.personalInfo.height && response.personalInfo.weight) {
+        $(".metrics-card").fadeIn();
+        updateBMI(response.personalInfo.height, response.personalInfo.weight);
+        updateGoal(
+          response.personalInfo.weight,
+          response.personalInfo.goalWeight
+        );
+      }
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -64,15 +71,15 @@ function updateMetrics() {
 }
 
 /*
-* Execute when DOM is fully loaded
-*/
+ * Execute when DOM is fully loaded
+ */
 $(document).ready(function () {
   updateMetrics();
 });
 
 /*
-* Click event for the Edit button on the Body Metrics page
-*/
+ * Click event for the Edit button on the Body Metrics page
+ */
 $("#edit-body-metrics-button").click(function (event) {
   event.preventDefault();
   $("#body-metrics-alert-success").hide();
@@ -93,8 +100,11 @@ $("#edit-body-metrics-button").click(function (event) {
       $("#weight-input").val(response.personalInfo.weight);
       $("#goal-weight-input").val(response.personalInfo.goalWeight);
 
-      updateBMI(response.personalInfo.height, response.personalInfo.weight)
-      updateGoal(response.personalInfo.weight, response.personalInfo.goalWeight)
+      updateBMI(response.personalInfo.height, response.personalInfo.weight);
+      updateGoal(
+        response.personalInfo.weight,
+        response.personalInfo.goalWeight
+      );
     },
     error: function (xhr, status, error) {
       var errorMessage = xhr.status + ": " + xhr.statusText;
@@ -104,13 +114,13 @@ $("#edit-body-metrics-button").click(function (event) {
 });
 
 /*
-* Saves the update Body Metrics for the user on the Body Metrics pagge
-*/
+ * Saves the update Body Metrics for the user on the Body Metrics pagge
+ */
 $("#save-body-metrics-button").click(function (event) {
   event.preventDefault();
   $("#body-metrics-alert-success").hide();
   $("#body-metrics-alert-danger").hide();
-  //at this point, the user has inputted their update metrics 
+  //at this point, the user has inputted their update metrics
   //goes back to view mode
   $("#view-body-metrics").show();
   $("#edit-body-metrics").hide();
@@ -130,7 +140,7 @@ $("#save-body-metrics-button").click(function (event) {
     data: JSON.stringify(bodyMetrics),
     contentType: "application/json",
     success: function (response) {
-      updateMetrics();    //calls to relfect the change
+      updateMetrics(); //calls to relfect the change
       $("#body-metrics-alert-success").text("Your information was updated");
       $("#body-metrics-alert-success").show();
     },

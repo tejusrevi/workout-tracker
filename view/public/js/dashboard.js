@@ -130,7 +130,7 @@ $("#search-bar").on("keyup", function () {
 $("#home-nav").click(function (event) {
   //hides all other views/pages, shows only the home page/view
   event.preventDefault();
-  $("#home").show();
+  $("#home").fadeIn();
   $("#body-metrics").hide();
   $("#account").hide();
   $("#about").hide();
@@ -146,7 +146,7 @@ $("#body-metrics-nav").click(function (event) {
   //hides all other views/pages, shows the Body Metrics page/view
   event.preventDefault();
   $("#home").hide();
-  $("#body-metrics").show();
+  $("#body-metrics").fadeIn();
   $("#account").hide();
   $("#about").hide();
 
@@ -162,7 +162,7 @@ $("#account-nav").click(function (event) {
   event.preventDefault();
   $("#home").hide();
   $("#body-metrics").hide();
-  $("#account").show();
+  $("#account").fadeIn();
   $("#about").hide();
 
   $(".link-dark").removeClass("active");
@@ -178,7 +178,7 @@ $("#about-nav").click(function (event) {
   $("#home").hide();
   $("#body-metrics").hide();
   $("#account").hide();
-  $("#about").show();
+  $("#about").fadeIn();
 
   $(".link-dark").removeClass("active");
   $("#about-nav").addClass("active");

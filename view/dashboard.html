@@ -40,7 +40,7 @@
         style="width: 20vw; min-height: 100%"
       >
         <a
-          href="/"
+          href="/dashboard"
           class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none"
         >
           <svg class="bi me-2" width="40" height="32">
@@ -110,14 +110,13 @@
                   border: none;
                   background-color: #f8f9fa;
                   border-radius: 12px !important;
-                  min-width: 70vw;
                 "
               />
             </div>
           </div>
-          <div id="filters" style="display: flex !important; flex-direction: row; justify-content: space-evenly; padding: 10px 0px; display: none;">
+          <div id="filters" style="padding: 10px 0px; display: none;">
             <div>
-              Filter By: 
+              <strong>Filter By: </strong>
             </div>
             <div class="filter-container">
               Body Part: 
@@ -404,19 +403,19 @@
             ></div>
           </div>
           <div style="width: 50%">
-            <div class="card metrics-card" style="height: 14rem; width: 90%">
+            <div class="card metrics-card" style="height: 14rem; width: 90%; display: none;">
               <h3 style="margin-bottom: 10px">BMI</h3>
               <h1
                 id="bmi-number"
                 style="text-align: center; width: 100%; font-weight: 300"
               >
-                22
+                
               </h1>
               <div id="bmi-text" style="text-align: center; width: 100%">
-                Your BMI is average
+                
               </div>
             </div>
-            <div class="card metrics-card" style="height: 14rem; width: 90%">
+            <div class="card metrics-card" style="height: 14rem; width: 90%; display: none;">
               <h3 style="margin-bottom: 10px">Goal</h3>
               <div id="bmi-text" style="text-align: center; width: 100%">
                 You are
