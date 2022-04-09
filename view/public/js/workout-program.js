@@ -164,8 +164,7 @@ $(document).ready(function () {
 });
 
 /*
- *
- *
+ * Registers keyup events for everytime characters are added/removed from #add-exercise-search input box
  */
 $("#add-exercise-search").on("keyup", function () {
   var value = $(this).val().toLowerCase();

@@ -114,6 +114,9 @@ $(".filter").on("change", function () {
   filterExercises()
 });
 
+/**
+ * Registers keyup event for when a character is added/removed from #search-bar input box
+ */
 $("#search-bar").on("keyup", function () {
   $("#filters").show();
   searchBarInput = $(this).val().toLowerCase();
