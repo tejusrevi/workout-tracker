@@ -1,3 +1,4 @@
+require('dotenv').config()
 const passport = require("passport");
 
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
@@ -6,9 +7,8 @@ const { google } = require("googleapis");
 
 const User = require("../model/user").User;
 
-const GOOGLE_CLIENT_ID =
-  "125650216413-snnjss4b97no4tkkcvrvbeecvopkbc9u.apps.googleusercontent.com";
-const GOOGLE_CLIENT_SECRET = "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";
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 
 const oauth2Client = new google.auth.OAuth2(
   GOOGLE_CLIENT_ID,
